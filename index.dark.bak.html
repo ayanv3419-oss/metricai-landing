@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MetricAi — Ask your data, get grounded answers</title>
+  <meta name="description" content="MetricAi is an AI analytics platform for small businesses. Upload your sales data, ask questions in plain English, and get grounded answers, narratives, and charts in seconds — no SQL required." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MetricAi — Ask your data, get grounded answers" />
+  <meta property="og:description" content="Upload your sales data, ask questions in plain English, and get a real number, a narrative, and a chart in seconds. Every query validated before it runs. Your data stays isolated." />
+  <meta property="og:url" content="https://agentic-ai-livid-eta.vercel.app" />
+  <meta property="og:site_name" content="MetricAi" />
+  <meta property="og:image" content="https://agentic-ai-livid-eta.vercel.app/og.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MetricAi — Ask your data, get grounded answers" />
+  <meta name="twitter:description" content="Upload your sales data, ask questions in plain English, and get a real number, a narrative, and a chart in seconds. Every query validated before it runs." />
+  <meta name="twitter:image" content="https://agentic-ai-livid-eta.vercel.app/og.png" />
+
+  <!-- Inline SVG favicon: Sigma mark, emerald on near-black -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%2309090b'/%3E%3Cpath d='M37 10H13l12 14-12 14h24' fill='none' stroke='%2334d399' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       TOKENS
+    ============================================================ */
+    :root {
+      /* colors */
+      --bg:            #09090b;
+      --bg-raised:     #101012;
+      --bg-card:       #0d0d0f;
+      --bg-inset:      #18181b;
+      --border:        #1f1f23;
+      --border-strong: #27272a;
+      --text-primary:  #fafafa;
+      --text-body:     #a1a1aa;
+      --text-muted:    #71717a;
+      --text-faint:    #52525b;
+      --accent:        #10b981;
+      --accent-bright: #34d399;
+      --accent-dim:    rgba(16,185,129,0.10);
+      --accent-border: rgba(16,185,129,0.30);
+      --accent-tint:   rgba(16,185,129,0.05);
+
+      /* radii */
+      --r-sm: 6px;
+      --r-md: 8px;
+      --r-lg: 10px;
+
+      /* spacing */
+      --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
+      --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+    }
+
+    /* ============================================================
+       RESET / BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-body);
+      font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+      font-feature-settings: 'cv11','ss01','ss03';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    h1, h2, h3, h4, p { margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    img, svg { display: block; }
+    ::selection { background: rgba(16,185,129,0.22); color: #fff; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-bright);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+
+    /* ============================================================
+       LAYOUT PRIMITIVES
+    ============================================================ */
+    .container {
+      max-width: 1120px;
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+    .section {
+      padding-block: var(--s-9);
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 80px;
+    }
+    #top { scroll-margin-top: 80px; }
+    .section-head {
+      max-width: 640px;
+      margin-bottom: var(--s-8);
+    }
+    .kicker {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: var(--s-4);
+    }
+    .h2 {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .lede {
+      margin-top: 18px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-body);
+      max-width: 640px;
+    }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 64px;
+      background: rgba(9,9,11,0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav__inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      border-radius: var(--r-md);
+      transition: opacity 0.15s ease;
+    }
+    .brand:hover { opacity: 0.85; }
+    .brand:focus-visible {
+      outline: 2px solid var(--accent-bright);
+      outline-offset: 3px;
+    }
+    .sigma {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--r-md);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sigma svg { width: 14px; height: 14px; }
+    .brand__name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav__link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-body);
+      transition: color 0.15s ease;
+    }
+    .nav__link:hover { color: var(--text-primary); }
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    .nav__signin {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-body);
+      transition: color 0.15s ease;
+    }
+    .nav__signin:hover { color: var(--text-primary); }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .btn:focus-visible { border-radius: var(--r-sm); }
+    .btn--primary {
+      background: var(--accent);
+      color: #052e1f;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 10px 20px;
+      border: none;
+    }
+    .btn--primary:hover { background: #0ea271; }
+    .btn--secondary {
+      background: transparent;
+      color: var(--text-primary);
+      font-weight: 500;
+      padding: 10px 20px;
+      border: 1px solid var(--border-strong);
+    }
+    .btn--secondary:hover {
+      border-color: #3f3f46;
+      background: rgba(255,255,255,0.03);
+    }
+    .btn--sm {
+      padding: 7px 14px;
+      font-size: 13px;
+    }
+    .btn__arrow { font-weight: 600; }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      padding: 112px 24px 96px;
+      text-align: center;
+    }
+    .hero__inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+    }
+    .hero__sub {
+      margin: 22px auto 0;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--text-body);
+      max-width: 560px;
+    }
+    .hero__cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+    .hero__media {
+      max-width: 880px;
+      margin: 64px auto 0;
+    }
+
+    /* ============================================================
+       CREDIBILITY STRIP
+    ============================================================ */
+    .strip {
+      border-top: 1px solid var(--border);
+      padding-block: 28px;
+    }
+    .strip__inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px 40px;
+    }
+    .strip__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .strip__item svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .strip__sep {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+    }
+
+    /* ============================================================
+       FEATURE DEEP-DIVE GRID
+    ============================================================ */
+    .feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .feature--rev .feature__media { order: -1; }
+    .feature__text { max-width: 480px; }
+    .feature__body {
+      margin-top: 16px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-body);
+    }
+    .checklist {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .checklist li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 15px;
+      color: var(--text-body);
+    }
+    .checklist svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    /* ============================================================
+       SECURITY / THREE-UP GRID
+    ============================================================ */
+    .grid3 {
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+    .cell {
+      background: var(--bg);
+      padding: var(--s-6);
+      transition: background 0.15s ease;
+    }
+    .cell:hover { background: #0d0d0f; }
+    .cell__index {
+      font-family: ui-monospace, 'SF Mono', Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .cell h4 {
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+    .cell p {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-body);
+    }
+
+    /* ============================================================
+       CTA BAND
+    ============================================================ */
+    .cta {
+      border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--accent-tint), transparent 60%);
+      padding-block: 112px;
+      text-align: center;
+    }
+    .cta .lede { margin-inline: auto; }
+    .cta__actions {
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 24px 32px;
+    }
+    .footer__inner { max-width: 1120px; margin: 0 auto; }
+    .footer__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer__brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footer .sigma { width: 20px; height: 20px; border-radius: var(--r-md); }
+    .footer .sigma svg { width: 11px; height: 11px; }
+    .footer__name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .footer__tag { font-size: 13px; color: var(--text-muted); }
+    .footer__links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer__links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+    }
+    .footer__links a:hover { color: var(--text-body); }
+    .footer__bottom {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer__copy { font-size: 12px; color: var(--text-faint); }
+
+    /* ============================================================
+       FADE-IN-UP (subtle reveal)
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 860px) {
+      .section { padding-block: var(--s-8); }
+      .section-head { margin-bottom: 40px; }
+      .h2 { font-size: 28px; }
+      .hero { padding: 80px 24px 64px; }
+      .hero h1 { font-size: 34px; }
+      .feature {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .feature--rev .feature__media { order: 0; }
+      .feature__text, .feature__media { max-width: 100%; }
+      .grid3 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .nav__links { display: none; }
+    }
+    @media (max-width: 640px) {
+      .footer__row { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .mk-body { padding: 14px; }
+    }
+
+    /* ============================================================
+       MOCKUP STYLES (prefixed mk-) — included once
+    ============================================================ */
+    .mk-win{background:#0e0e11;border:1px solid var(--border-strong);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.35);overflow:hidden;font-family:'Inter',-apple-system,system-ui,sans-serif;color:#e4e4e7;-webkit-font-smoothing:antialiased}
+    /* Inline-SVG icon wrapper (replaces Tabler webfont). Sized in em so existing .ti font-size rules still scale it. */
+    .ti{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;font-size:1em;flex:0 0 auto;line-height:0}
+    .ti svg{width:1em;height:1em;display:block;stroke:currentColor;fill:none}
+    .mk-bar{height:38px;display:flex;align-items:center;gap:14px;padding:0 14px;border-bottom:1px solid #1d1d22;background:#101012}
+    .mk-dots{display:flex;gap:7px}
+    .mk-dot{width:9px;height:9px;border-radius:50%;background:#2a2a2e}
+    .mk-url{margin-left:auto;background:#18181b;border-radius:6px;font-family:ui-monospace,'SF Mono',Consolas,monospace;font-size:11.5px;color:#71717a;padding:4px 12px}
+    .mk-body{background:#0a0a0c;padding:20px}
+    .mk-pos{color:#34d399}.mk-neg{color:#f87171}
+
+    /* ---- A: assistant ---- */
+    .mk-chat{display:flex;flex-direction:column;gap:16px}
+    .mk-urow{display:flex;justify-content:flex-end}
+    .mk-ubub{background:#18181b;border:1px solid #2a2a2e;color:#e4e4e7;font-size:13.5px;line-height:1.5;padding:10px 14px;border-radius:8px;max-width:78%}
+    .mk-arow{display:flex;gap:11px;align-items:flex-start}
+    .mk-av{flex:0 0 28px;width:28px;height:28px;border-radius:8px;background:#0c1f18;border:1px solid #14492f;display:flex;align-items:center;justify-content:center;color:#10b981;font-size:14px;margin-top:2px}
+    .mk-abody{flex:1;min-width:0}
+    .mk-intro{font-size:13.5px;line-height:1.55;color:#cfcfd4;margin-bottom:13px}
+    .mk-card{background:#0e0e12;border:1px solid #222228;border-radius:8px;overflow:hidden;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mk-tbl{width:100%;border-collapse:collapse;font-size:12.5px;font-family:ui-monospace,'SF Mono',Consolas,monospace}
+    .mk-tbl thead th{font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:#5b5b63;font-weight:500;text-align:left;padding:9px 14px;border-bottom:1px solid #1d1d22;background:#101015;font-family:'Inter',sans-serif}
+    .mk-tbl thead th.mk-r,.mk-tbl td.mk-r{text-align:right}
+    .mk-tbl tbody td{padding:9px 14px;border-bottom:1px solid #18181d;color:#d8d8dd}
+    .mk-tbl tbody tr:last-child td{border-bottom:none}
+    .mk-tbl .mk-pn{color:#a9a9b0;font-variant-numeric:tabular-nums}
+    .mk-tbl .mk-rev{color:#e8e8ec;font-variant-numeric:tabular-nums;font-weight:500}
+    .mk-charttitle{font-size:11px;color:#8b8b93;margin:15px 2px 11px;display:flex;align-items:center;gap:7px}
+    .mk-charttitle .ti{font-size:13px;color:#10b981}
+    .mk-bars{display:flex;flex-direction:column;gap:9px}
+    .mk-brow{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:11px}
+    .mk-blab{font-size:11.5px;color:#9a9aa1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mk-btrack{height:9px;background:#141418;border-radius:3px;overflow:hidden}
+    .mk-bfill{height:100%;background:#10b981;border-radius:3px}
+    .mk-bval{font-size:11.5px;color:#c8c8ce;font-variant-numeric:tabular-nums;min-width:62px;text-align:right}
+    .mk-insight{margin-top:14px;padding-top:13px;border-top:1px solid #1a1a1f;font-size:12px;color:#8b8b93;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+    .mk-insight .ti{color:#10b981;font-size:14px;margin-top:1px;flex:0 0 auto}
+
+    /* ---- B: dashboard ---- */
+    .mk-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+    .mk-kpi{background:#0e0e12;border:1px solid #202026;border-radius:8px;padding:13px 15px}
+    .mk-klab{font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;color:#6e6e76;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+    .mk-klab .ti{font-size:13px;color:#5b5b63}
+    .mk-knum{font-size:22px;font-weight:600;letter-spacing:-.3px;color:#f1f1f4;font-variant-numeric:tabular-nums;line-height:1}
+    .mk-kdelta{font-size:11.5px;margin-top:8px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px}
+    .mk-kdelta .ti{font-size:13px}
+    .mk-grid2{display:grid;grid-template-columns:1.85fr 1fr;gap:14px}
+    .mk-panel{background:#0e0e12;border:1px solid #202026;border-radius:8px;padding:14px 16px}
+    .mk-phead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .mk-ptitle{font-size:12.5px;color:#d8d8dd;font-weight:500}
+    .mk-ptag{font-size:10px;color:#10b981;background:#0c1f18;border:1px solid #123c28;padding:2px 8px;border-radius:6px;letter-spacing:.3px}
+    .mk-psub{font-size:10.5px;color:#5b5b63;margin-bottom:10px}
+    .mk-chartwrap{position:relative;padding-left:34px}
+    .mk-xaxis{display:flex;justify-content:space-between;margin-top:7px;padding:0 2px}
+    .mk-xaxis span{font-size:10px;color:#5b5b63}
+    .mk-yax{position:absolute;left:0;top:0;height:140px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+    .mk-yax span{font-size:9.5px;color:#46464d;line-height:1}
+    .mk-toplist{display:flex;flex-direction:column;gap:13px}
+    .mk-tlhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+    .mk-tlname{font-size:11.5px;color:#cfcfd4}
+    .mk-tlval{font-size:11px;color:#8b8b93;font-variant-numeric:tabular-nums}
+    .mk-tltrack{height:6px;background:#16161b;border-radius:3px;overflow:hidden}
+    .mk-tlfill{height:100%;background:#10b981;border-radius:3px;opacity:.92}
+
+    /* ---- C: pipeline ---- */
+    .mk-src{display:flex;flex-direction:column;gap:10px}
+    .mk-srow{display:flex;align-items:center;gap:13px;background:#0e0e12;border:1px solid #202026;border-radius:8px;padding:12px 15px}
+    .mk-sicon{flex:0 0 36px;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+    .mk-sicon.xls{background:#0c1c14;border:1px solid #12422b;color:#34d399}
+    .mk-sicon.csv{background:#15151a;border:1px solid #232329;color:#9a9aa1}
+    .mk-sicon.drv{background:#15151a;border:1px solid #232329;color:#9a9aa1}
+    .mk-sinfo{flex:1;min-width:0}
+    .mk-sname{font-size:13px;color:#e4e4e7;font-weight:500;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+    .mk-srows{font-size:11px;color:#7a7a82;font-weight:400;font-variant-numeric:tabular-nums}
+    .mk-smeta{font-size:11px;color:#5b5b63;margin-top:4px;display:flex;align-items:center;gap:7px}
+    .mk-sdot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+    .mk-sdot.ok{background:#10b981}
+    .mk-status{font-size:11px;display:flex;align-items:center;gap:6px;flex:0 0 auto;padding-left:6px}
+    .mk-status.ok{color:#34d399}
+    .mk-status .ti{font-size:14px}
+    .mk-schema{margin-top:14px;background:#0c0c0f;border:1px solid #1c1c21;border-radius:8px;padding:13px 15px}
+    .mk-schtop{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+    .mk-schtop .ti{font-size:14px;color:#10b981}
+    .mk-schtop span{font-size:11px;color:#8b8b93;letter-spacing:.2px}
+    .mk-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+    .mk-tag{font-size:11px;color:#9a9aa1;background:#15151a;border:1px solid #232329;border-radius:6px;padding:4px 9px;font-variant-numeric:tabular-nums}
+    .mk-tag .ti{font-size:12px;color:#5b5b63;margin-right:5px;vertical-align:-1px}
+    .mk-schfoot{font-size:11.5px;color:#6e6e76;border-top:1px solid #18181d;padding-top:10px;display:flex;align-items:center;gap:7px}
+    .mk-schfoot b{color:#a9a9b0;font-weight:500}
+    .mk-schfoot .ti{font-size:14px;color:#10b981}
+    @media(max-width:560px){
+      .mk-kpis{grid-template-columns:repeat(2,1fr)}
+      .mk-grid2{grid-template-columns:1fr}
+      .mk-brow{grid-template-columns:80px 1fr auto}
+    }
+
+    /* ============================================================
+       ADDED SECTIONS — How it works / Examples / Use cases /
+       Integrations / FAQ.  Prefixed (.hiw- .exq- .uc- .intg- .faq-)
+       Reuses tokens + .section/.container/.kicker/.h2/.grid3/.cell.
+    ============================================================ */
+
+    /* ---- 1. HOW IT WORKS — numbered steps in a row ---- */
+    .hiw-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-5);
+    }
+    .hiw-step {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: var(--s-6);
+    }
+    .hiw-step__index {
+      font-family: ui-monospace, 'SF Mono', Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--accent-bright);
+    }
+    .hiw-step h3 {
+      margin-top: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+    .hiw-step p {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-body);
+    }
+    /* thin connector between steps — desktop only, drawn into the gap */
+    .hiw-step + .hiw-step::before {
+      content: "";
+      position: absolute;
+      top: 40px;
+      left: -24px;
+      width: 24px;
+      height: 1px;
+      background: var(--border-strong);
+    }
+
+    /* ---- 2. EXAMPLE QUESTIONS — labelled groups of cards ---- */
+    .exq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-7);
+    }
+    .exq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .exq-card {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: var(--s-3) var(--s-4);
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-body);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .exq-card:hover {
+      border-color: var(--border-strong);
+      background: #0e0e11;
+    }
+    .exq-card svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      margin-top: 4px;
+      color: var(--text-faint);
+    }
+
+    /* ---- 3. USE CASES — 2x2 persona cards ---- */
+    .uc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-4);
+    }
+    .uc-card {
+      display: flex;
+      gap: var(--s-4);
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: var(--s-6);
+      transition: border-color 0.15s ease;
+    }
+    .uc-card:hover { border-color: var(--border-strong); }
+    .uc-glyph {
+      flex: 0 0 36px;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-bright);
+    }
+    .uc-glyph svg { width: 17px; height: 17px; }
+    .uc-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+    .uc-card p {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-body);
+    }
+
+    /* ---- 4. INTEGRATIONS — row of source tiles ---- */
+    .intg-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--border);
+    }
+    .intg-item {
+      background: var(--bg);
+      padding: var(--s-6);
+      transition: background 0.15s ease;
+    }
+    .intg-item:hover { background: var(--bg-card); }
+    .intg-tile {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--r-md);
+      background: var(--bg-inset);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-body);
+      margin-bottom: 16px;
+    }
+    .intg-tile svg { width: 18px; height: 18px; }
+    .intg-item h3 {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+    .intg-item p {
+      margin-top: 6px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* ---- 5. FAQ — two-column details accordion ---- */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--border);
+    }
+    .faq-item {
+      background: var(--bg);
+      padding: 0;
+    }
+    .faq-item > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--s-4);
+      padding: var(--s-5);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      transition: background 0.15s ease;
+    }
+    .faq-item > summary:hover { background: var(--bg-card); }
+    .faq-item > summary:focus-visible {
+      outline: 2px solid var(--accent-bright);
+      outline-offset: -2px;
+    }
+    .faq-item > summary::-webkit-details-marker { display: none; }
+    /* clean inline chevron marker — rotates on open, no webfont */
+    .faq-chev {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+    .faq-item[open] .faq-chev { transform: rotate(180deg); }
+    .faq-answer {
+      padding: 0 var(--s-5) var(--s-5);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-body);
+      max-width: 52ch;
+    }
+
+    /* ---- responsive: all added sections collapse < 860px ---- */
+    @media (max-width: 860px) {
+      .hiw-steps { grid-template-columns: 1fr; }
+      .hiw-step + .hiw-step::before { display: none; }
+      .exq-grid { grid-template-columns: 1fr; gap: 32px; }
+      .uc-grid { grid-template-columns: 1fr; }
+      .intg-row { grid-template-columns: repeat(2, 1fr); }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .intg-row { grid-template-columns: 1fr; }
+    }
+    /* ---- See it in action (video) ---- */
+    .vid-wrap { width: 100%; }
+    .vid-frame {
+      position: relative;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 4px 16px rgba(0,0,0,.35);
+      aspect-ratio: 16 / 9;
+    }
+    .vid-el { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .vid-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(9,9,11,.30);
+      border: 0; padding: 0; cursor: pointer;
+      transition: background .2s ease, opacity .2s ease;
+    }
+    .vid-play:hover { background: rgba(9,9,11,.18); }
+    .vid-play:focus-visible { outline: none; }
+    .vid-play:focus-visible .vid-playbtn {
+      outline: 2px solid var(--accent-bright);
+      outline-offset: 3px;
+    }
+    .vid-play.is-hidden { opacity: 0; pointer-events: none; }
+    .vid-playbtn {
+      width: 68px; height: 68px; border-radius: 999px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .vid-play:hover .vid-playbtn { transform: scale(1.06); background: var(--accent-bright); }
+    .vid-playbtn svg { width: 26px; height: 26px; margin-left: 3px; fill: #09090b; }
+    @media (max-width: 860px) {
+      .vid-playbtn { width: 56px; height: 56px; }
+      .vid-playbtn svg { width: 22px; height: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAV
+  ============================================================ -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="#top" aria-label="MetricAi home">
+        <span class="sigma" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#34d399" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M37 10H13l12 14-12 14h24"/>
+          </svg>
+        </span>
+        <span class="brand__name">MetricAi</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a class="nav__link" href="#product">Product</a>
+        <a class="nav__link" href="#how-it-works">How it works</a>
+        <a class="nav__link" href="#use-cases">Use cases</a>
+        <a class="nav__link" href="#faq">FAQ</a>
+        <a class="nav__link" href="#security">Security</a>
+      </nav>
+
+      <div class="nav__right">
+        <a class="nav__signin" href="https://agentic-ai-livid-eta.vercel.app">Sign in</a>
+        <a class="btn btn--primary btn--sm" href="https://agentic-ai-livid-eta.vercel.app">Open the app</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============================================================
+         HERO
+    ============================================================ -->
+    <section class="hero">
+      <div class="hero__inner">
+        <h1 class="reveal">Ask your data anything. Get answers in seconds.</h1>
+        <p class="hero__sub reveal">
+          MetricAi connects to your sales and purchase data, writes and validates the SQL for you, and answers every question with a real number, a clear narrative, and a chart.
+        </p>
+        <div class="hero__cta reveal">
+          <a class="btn btn--primary" href="https://agentic-ai-livid-eta.vercel.app">Get started <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="btn btn--secondary" href="#see-it">Watch the demo</a>
+        </div>
+
+        <!-- Hero visual — Mockup A: AI assistant -->
+        <div class="hero__media reveal">
+          <div class="mk-win" aria-label="MetricAi assistant answering a question with a data table and chart">
+            <div class="mk-bar">
+              <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
+              <div class="mk-url" aria-hidden="true">app.metricai.in</div>
+            </div>
+            <div class="mk-body">
+              <div class="mk-chat">
+                <div class="mk-urow">
+                  <div class="mk-ubub">What were my top 5 products by revenue last month?</div>
+                </div>
+                <div class="mk-arow">
+                  <div class="mk-av" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6 6 6 0 0 1 -6 -6 6 6 0 0 1 -6 6 6 6 0 0 1 6 6z"/></svg></span></div>
+                  <div class="mk-abody">
+                    <div class="mk-intro">Here are your highest-revenue products for May 2026, with month-over-month change.</div>
+                    <div class="mk-card">
+                      <table class="mk-tbl">
+                        <thead>
+                          <tr><th>Product</th><th class="mk-r">Revenue</th><th class="mk-r">Change</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr><td class="mk-pn">Aashirvaad Atta 10kg</td><td class="mk-r mk-rev">&#8377;4,82,300</td><td class="mk-r mk-pos">+14.2%</td></tr>
+                          <tr><td class="mk-pn">Tata Salt 1kg</td><td class="mk-r mk-rev">&#8377;3,91,750</td><td class="mk-r mk-pos">+8.6%</td></tr>
+                          <tr><td class="mk-pn">Amul Gold Milk 1L</td><td class="mk-r mk-rev">&#8377;3,12,480</td><td class="mk-r mk-neg">&#8722;3.1%</td></tr>
+                          <tr><td class="mk-pn">Fortune Oil 5L</td><td class="mk-r mk-rev">&#8377;2,84,500</td><td class="mk-r mk-pos">+6.9%</td></tr>
+                          <tr><td class="mk-pn">Maggi Noodles 12-pk</td><td class="mk-r mk-rev">&#8377;2,18,920</td><td class="mk-r mk-neg">&#8722;1.8%</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="mk-charttitle"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1zm12 -5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v11a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1zm-6 -3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1zM4 20h14"/></svg></span>Top products — May 2026</div>
+                    <div class="mk-bars">
+                      <div class="mk-brow"><div class="mk-blab">Aashirvaad Atta</div><div class="mk-btrack"><div class="mk-bfill" style="width:100%;opacity:1"></div></div><div class="mk-bval">&#8377;4,82,300</div></div>
+                      <div class="mk-brow"><div class="mk-blab">Tata Salt</div><div class="mk-btrack"><div class="mk-bfill" style="width:81%;opacity:.85"></div></div><div class="mk-bval">&#8377;3,91,750</div></div>
+                      <div class="mk-brow"><div class="mk-blab">Amul Gold Milk</div><div class="mk-btrack"><div class="mk-bfill" style="width:65%;opacity:.7"></div></div><div class="mk-bval">&#8377;3,12,480</div></div>
+                      <div class="mk-brow"><div class="mk-blab">Fortune Oil</div><div class="mk-btrack"><div class="mk-bfill" style="width:59%;opacity:.55"></div></div><div class="mk-bval">&#8377;2,84,500</div></div>
+                      <div class="mk-brow"><div class="mk-blab">Maggi Noodles</div><div class="mk-btrack"><div class="mk-bfill" style="width:45%;opacity:.42"></div></div><div class="mk-bval">&#8377;2,18,920</div></div>
+                    </div>
+                    <div class="mk-insight"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h1m8 -9v1m8 8h1M5.6 5.6l.7 .7m12.1 -.7l-.7 .7M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3M9.7 17h4.6"/></svg></span><span>Atta and salt staples drove 52% of top-5 revenue. Amul Gold Milk slipped 3.1% month over month — the only top-5 product to decline.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SEE IT IN ACTION (video)
+    ============================================================ -->
+    <section class="section" id="see-it">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">See it in action</p>
+          <h2 class="h2">Watch MetricAi answer a real question.</h2>
+          <p class="lede">A short walkthrough: upload your data, ask in plain English, and get a grounded answer with the right chart.</p>
+        </div>
+        <div class="vid-wrap reveal">
+          <div class="vid-frame">
+            <video class="vid-el" id="adVideo" controls preload="metadata" playsinline aria-label="MetricAi product demonstration">
+              <source src="metric-ai-ad.mp4#t=0.1" type="video/mp4" />
+              Your browser does not support embedded video. <a href="metric-ai-ad.mp4">Download the demo</a>.
+            </video>
+            <button class="vid-play" id="adPlay" type="button" aria-label="Play demo video">
+              <span class="vid-playbtn" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CREDIBILITY STRIP
+    ============================================================ -->
+    <section class="strip" aria-label="What you get">
+      <div class="container">
+        <div class="strip__inner">
+          <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>No SQL required</span>
+          <span class="strip__sep" aria-hidden="true"></span>
+          <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Answers in seconds</span>
+          <span class="strip__sep" aria-hidden="true"></span>
+          <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Every query validated before it runs</span>
+          <span class="strip__sep" aria-hidden="true"></span>
+          <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Your data stays isolated</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FEATURE 1 — CONVERSATIONAL ANALYTICS (text left, mockup right)
+    ============================================================ -->
+    <section class="section" id="product">
+      <div class="container">
+        <div class="feature">
+          <div class="feature__text reveal">
+            <p class="kicker">Conversational analytics</p>
+            <h2 class="h2">Every answer backed by your data.</h2>
+            <p class="feature__body">
+              Type a question the way you'd ask an analyst. MetricAi writes and validates the SQL, then streams back a number, a narrative, and the right chart.
+            </p>
+            <ul class="checklist">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Plain-English questions, no query language</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Answers cite real rows in your data</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Charts chosen automatically — bar, line, or pie</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Responses stream live as they compute</span></li>
+            </ul>
+          </div>
+          <div class="feature__media reveal">
+            <div class="mk-win" aria-label="Chat exchange showing a plain-English question and a grounded answer">
+              <div class="mk-bar">
+                <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
+                <div class="mk-url" aria-hidden="true">app.metricai.in</div>
+              </div>
+              <div class="mk-body">
+                <div class="mk-chat">
+                  <div class="mk-urow">
+                    <div class="mk-ubub">Which region grew fastest in Q2, and by how much?</div>
+                  </div>
+                  <div class="mk-arow">
+                    <div class="mk-av" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6 6 6 0 0 1 -6 -6 6 6 0 0 1 -6 6 6 6 0 0 1 6 6z"/></svg></span></div>
+                    <div class="mk-abody">
+                      <div class="mk-intro">North zone led Q2 growth at <strong style="color:#e4e4e7">+18.4%</strong> over Q1, driven by staples. Here's the regional breakdown.</div>
+                      <div class="mk-card">
+                        <table class="mk-tbl">
+                          <thead>
+                            <tr><th>Region</th><th class="mk-r">Q2 Revenue</th><th class="mk-r">Growth</th></tr>
+                          </thead>
+                          <tbody>
+                            <tr><td class="mk-pn">North</td><td class="mk-r mk-rev">&#8377;14,28,000</td><td class="mk-r mk-pos">+18.4%</td></tr>
+                            <tr><td class="mk-pn">West</td><td class="mk-r mk-rev">&#8377;11,06,500</td><td class="mk-r mk-pos">+9.2%</td></tr>
+                            <tr><td class="mk-pn">South</td><td class="mk-r mk-rev">&#8377;9,84,200</td><td class="mk-r mk-pos">+4.7%</td></tr>
+                            <tr><td class="mk-pn">East</td><td class="mk-r mk-rev">&#8377;6,71,900</td><td class="mk-r mk-neg">&#8722;2.3%</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="mk-insight"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h1m8 -9v1m8 8h1M5.6 5.6l.7 .7m12.1 -.7l-.7 .7M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3M9.7 17h4.6"/></svg></span><span>East dipped 2.3% — the only region down this quarter. Grounded on 4,512 order rows in your data.</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FEATURE 2 — KPI DASHBOARD (mockup left, text right) — REVERSED
+    ============================================================ -->
+    <section class="section" id="dashboard">
+      <div class="container">
+        <div class="feature feature--rev">
+          <div class="feature__text reveal">
+            <p class="kicker">KPI dashboard</p>
+            <h2 class="h2">The numbers that run your business.</h2>
+            <p class="feature__body">
+              Revenue, margin, top products, and trends — calculated directly from your uploaded files. No manual modelling, no stale exports. The dashboard shows exactly what your data says.
+            </p>
+            <ul class="checklist">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Revenue and margin from actual transactions</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Top products ranked by real sales</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Trend lines across any period</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Refreshes as new data lands</span></li>
+            </ul>
+          </div>
+          <div class="feature__media reveal">
+            <div class="mk-win" aria-label="KPI dashboard with revenue, margin, orders, a trend line, and top products">
+              <div class="mk-bar">
+                <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
+                <div class="mk-url" aria-hidden="true">app.metricai.in</div>
+              </div>
+              <div class="mk-body">
+                <div class="mk-kpis">
+                  <div class="mk-kpi">
+                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5h-11h3a4 4 0 0 1 0 8h-3l6 6m-6 -10h11"/></svg></span>Revenue</div>
+                    <div class="mk-knum">&#8377;48.2L</div>
+                    <div class="mk-kdelta mk-pos"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6 -6l4 4l8 -8m-6 0h6v6"/></svg></span>+12.4%</div>
+                  </div>
+                  <div class="mk-kpi">
+                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5l-10 14m1 -13a2 2 0 1 0 0.001 0M17 15a2 2 0 1 0 0.001 0"/></svg></span>Gross margin</div>
+                    <div class="mk-knum">31.8%</div>
+                    <div class="mk-kdelta mk-pos"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6 -6l4 4l8 -8m-6 0h6v6"/></svg></span>+2.1pt</div>
+                  </div>
+                  <div class="mk-kpi">
+                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2zm3 0v-2a3 3 0 0 1 6 0v2"/></svg></span>Orders</div>
+                    <div class="mk-knum">1,847</div>
+                    <div class="mk-kdelta mk-pos"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6 -6l4 4l8 -8m-6 0h6v6"/></svg></span>+8.9%</div>
+                  </div>
+                  <div class="mk-kpi">
+                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21v-16a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2zm4 -13h6m-6 4h6m-6 4h4"/></svg></span>Avg order</div>
+                    <div class="mk-knum">&#8377;2,610</div>
+                    <div class="mk-kdelta mk-neg"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l6 6l4 -4l8 8m-6 0h6v-6"/></svg></span>&#8722;1.2%</div>
+                  </div>
+                </div>
+                <div class="mk-grid2">
+                  <div class="mk-panel">
+                    <div class="mk-phead">
+                      <div class="mk-ptitle">Revenue trend</div>
+                      <div class="mk-ptag">+12.4%</div>
+                    </div>
+                    <div class="mk-psub">Monthly net revenue · Dec 2025 – May 2026</div>
+                    <div class="mk-chartwrap">
+                      <div class="mk-yax" aria-hidden="true"><span>50L</span><span>40L</span><span>30L</span><span>20L</span></div>
+                      <svg viewBox="0 0 520 140" width="100%" height="140" preserveAspectRatio="none" style="display:block" role="img" aria-label="Revenue trend line chart rising over six months">
+                        <line x1="0" y1="2" x2="520" y2="2" stroke="#17171c" stroke-width="1"/>
+                        <line x1="0" y1="47" x2="520" y2="47" stroke="#17171c" stroke-width="1"/>
+                        <line x1="0" y1="92" x2="520" y2="92" stroke="#17171c" stroke-width="1"/>
+                        <line x1="0" y1="137" x2="520" y2="137" stroke="#17171c" stroke-width="1"/>
+                        <polygon points="6,96 110,84 214,90 318,58 422,44 514,26 514,138 6,138" fill="#10b981" fill-opacity="0.07"/>
+                        <polyline points="6,96 110,84 214,90 318,58 422,44 514,26" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="6" cy="96" r="3" fill="#0a0a0c" stroke="#10b981" stroke-width="2"/>
+                        <circle cx="110" cy="84" r="3" fill="#0a0a0c" stroke="#10b981" stroke-width="2"/>
+                        <circle cx="214" cy="90" r="3" fill="#0a0a0c" stroke="#10b981" stroke-width="2"/>
+                        <circle cx="318" cy="58" r="3" fill="#0a0a0c" stroke="#10b981" stroke-width="2"/>
+                        <circle cx="422" cy="44" r="3" fill="#0a0a0c" stroke="#10b981" stroke-width="2"/>
+                        <circle cx="514" cy="26" r="3.4" fill="#10b981" stroke="#0a0a0c" stroke-width="2"/>
+                      </svg>
+                      <div class="mk-xaxis" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span></div>
+                    </div>
+                  </div>
+                  <div class="mk-panel">
+                    <div class="mk-phead"><div class="mk-ptitle">Top products</div></div>
+                    <div class="mk-psub">Share of revenue · May</div>
+                    <div class="mk-toplist">
+                      <div><div class="mk-tlhead"><span class="mk-tlname">Aashirvaad Atta</span><span class="mk-tlval">&#8377;4.82L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:100%"></div></div></div>
+                      <div><div class="mk-tlhead"><span class="mk-tlname">Tata Salt</span><span class="mk-tlval">&#8377;3.92L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:81%"></div></div></div>
+                      <div><div class="mk-tlhead"><span class="mk-tlname">Amul Gold Milk</span><span class="mk-tlval">&#8377;3.12L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:65%"></div></div></div>
+                      <div><div class="mk-tlhead"><span class="mk-tlname">Fortune Oil</span><span class="mk-tlval">&#8377;2.85L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:59%"></div></div></div>
+                      <div><div class="mk-tlhead"><span class="mk-tlname">Maggi Noodles</span><span class="mk-tlval">&#8377;2.19L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:45%"></div></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FEATURE 3 — UPLOAD AND SYNC (text left, mockup right)
+    ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="feature">
+          <div class="feature__text reveal">
+            <p class="kicker">Upload and sync</p>
+            <h2 class="h2">From spreadsheet to answers in minutes.</h2>
+            <p class="feature__body">
+              Upload the CSV or Excel files you already keep, or sync them from Google Drive. Each account runs in its own isolated database environment from day one.
+            </p>
+            <ul class="checklist">
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>CSV and XLSX upload, no reformatting</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Google Drive sync for living files</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Fully isolated environment per account</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Query your data the moment it lands</span></li>
+            </ul>
+          </div>
+          <div class="feature__media reveal">
+            <div class="mk-win" aria-label="Data sources panel showing uploaded files, Google Drive sync, and inferred columns">
+              <div class="mk-bar">
+                <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
+                <div class="mk-url" aria-hidden="true">app.metricai.in</div>
+              </div>
+              <div class="mk-body">
+                <div class="mk-src">
+                  <div class="mk-srow">
+                    <div class="mk-sicon xls" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2zM8 11l3 5m0 -5l-3 5"/></svg></span></div>
+                    <div class="mk-sinfo">
+                      <div class="mk-sname">sales_2026.xlsx <span class="mk-srows">· 12,408 rows</span></div>
+                      <div class="mk-smeta"><span class="mk-sdot ok" aria-hidden="true"></span>Last sync 2 min ago · 6 sheets</div>
+                    </div>
+                    <div class="mk-status ok"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></span>Synced</div>
+                  </div>
+                  <div class="mk-srow">
+                    <div class="mk-sicon csv" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2zM9 9h1M9 13h6M9 17h6"/></svg></span></div>
+                    <div class="mk-sinfo">
+                      <div class="mk-sname">purchases_q2.csv <span class="mk-srows">· 8,112 rows</span></div>
+                      <div class="mk-smeta"><span class="mk-sdot ok" aria-hidden="true"></span>Last sync 11 min ago · 1 sheet</div>
+                    </div>
+                    <div class="mk-status ok"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></span>Synced</div>
+                  </div>
+                  <div class="mk-srow">
+                    <div class="mk-sicon drv" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10l-6 10l-3 -5l6 -10zm-6 10h12l3 -5h-12zm9 -15h-6l6 10h6z"/></svg></span></div>
+                    <div class="mk-sinfo">
+                      <div class="mk-sname">Google Drive · /Finance/Daily <span class="mk-srows">· 3 files</span></div>
+                      <div class="mk-smeta"><span class="mk-sdot ok" aria-hidden="true"></span>Last sync just now · 3 files</div>
+                    </div>
+                    <div class="mk-status ok"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></span>Synced</div>
+                  </div>
+                </div>
+                <div class="mk-schema">
+                  <div class="mk-schtop"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6h-16zm0 6v10m0 -5h10m6 -5v4m-3 -2h6"/></svg></span><span>Inferred columns</span></div>
+                  <div class="mk-tags">
+                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2zm12 -4v4M8 3v4M4 11h16"/></svg></span>order_date</span>
+                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9zM12 12l8 -4.5M12 12v9M12 12l-8 -4.5"/></svg></span>product</span>
+                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14M5 15h14M11 4l-2 16M15 4l-2 16"/></svg></span>qty</span>
+                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5h-11h3a4 4 0 0 1 0 8h-3l6 6m-6 -10h11"/></svg></span>unit_price</span>
+                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.7 16.7l-4.3 4.3a2 2 0 0 1 -2.8 0l-4.3 -4.3a8 8 0 1 1 11.4 0z"/></svg></span>region</span>
+                  </div>
+                  <div class="mk-schfoot"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21l15 -15l-3 -3l-15 15zM15 6l3 3M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/></svg></span><span>Schema inferred automatically — <b>showing 5 of 14 columns</b>, types detected on ingest</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         HOW IT WORKS — three numbered steps
+    ============================================================ -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">How it works</p>
+          <h2 class="h2">From raw files to real answers.</h2>
+          <p class="lede">Connect your data, ask a question, get a grounded answer. No setup, no SQL, no dashboards to build.</p>
+        </div>
+        <div class="hiw-steps reveal">
+          <div class="hiw-step">
+            <div class="hiw-step__index">01</div>
+            <h3>Connect your data</h3>
+            <p>Upload a CSV or Excel file, or sync from Google Drive. Columns, types, and relationships are inferred automatically on ingest.</p>
+          </div>
+          <div class="hiw-step">
+            <div class="hiw-step__index">02</div>
+            <h3>Ask in plain English</h3>
+            <p>Type a question the way you would ask an analyst. No query language, no formulas, no rigid templates to fill in first.</p>
+          </div>
+          <div class="hiw-step">
+            <div class="hiw-step__index">03</div>
+            <h3>Get the answer</h3>
+            <p>An agent writes and validates SQL against your data, then returns a grounded number, a short narrative, and the right chart in seconds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         EXAMPLE QUESTIONS — four labelled groups
+    ============================================================ -->
+    <section class="section" id="examples">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Example questions</p>
+          <h2 class="h2">Ask the questions you actually have.</h2>
+          <p class="lede">These are the kinds of questions you can type the moment your data lands. Plain language in, grounded answers out.</p>
+        </div>
+        <div class="exq-grid reveal">
+
+          <div>
+            <p class="kicker">Sales</p>
+            <div class="exq-list">
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>What was my total revenue last month, and how does it compare to the month before?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which 5 products brought in the most revenue last month?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which outlet did the most sales this quarter?</span></div>
+            </div>
+          </div>
+
+          <div>
+            <p class="kicker">Margin &amp; profit</p>
+            <div class="exq-list">
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>What is my gross margin right now, and is it improving quarter over quarter?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which products are selling well but earning me the lowest margin?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>How much did my purchase cost eat into profit last month?</span></div>
+            </div>
+          </div>
+
+          <div>
+            <p class="kicker">Products &amp; inventory</p>
+            <div class="exq-list">
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which products are barely selling this season compared with the rest?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>What are my best sellers by quantity versus by revenue?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which items did I buy the most stock of last quarter?</span></div>
+            </div>
+          </div>
+
+          <div>
+            <p class="kicker">Trends &amp; comparisons</p>
+            <div class="exq-list">
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which region declined this quarter compared to last?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>How is this month tracking against the same month last year?</span></div>
+              <div class="exq-card"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6l3 3 3-3"/></svg><span>Which products are trending up over the last six months?</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         USE CASES — four persona cards (2x2)
+    ============================================================ -->
+    <section class="section" id="use-cases">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Who it's for</p>
+          <h2 class="h2">Built for how small businesses run.</h2>
+          <p class="lede">If you sell, stock, or distribute, your sales and purchase files already hold the answers. MetricAi reads them.</p>
+        </div>
+        <div class="uc-grid reveal">
+
+          <div class="uc-card">
+            <div class="uc-glyph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
+            </div>
+            <div>
+              <h3>Retail shops</h3>
+              <p>See your best sellers, slow movers, and daily revenue without exporting a single spreadsheet or pivot table.</p>
+            </div>
+          </div>
+
+          <div class="uc-card">
+            <div class="uc-glyph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6-9 6-9-6z"/><path d="M3 9v6l9 6 9-6V9"/></svg>
+            </div>
+            <div>
+              <h3>Wholesale &amp; distribution</h3>
+              <p>Track margins across products and customers, and catch declining accounts before they quietly cost you the quarter.</p>
+            </div>
+          </div>
+
+          <div class="uc-card">
+            <div class="uc-glyph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l3 3v17H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+            </div>
+            <div>
+              <h3>D2C brands</h3>
+              <p>Connect your sales exports and ask how each product, channel, and month is really performing against the last.</p>
+            </div>
+          </div>
+
+          <div class="uc-card">
+            <div class="uc-glyph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/></svg>
+            </div>
+            <div>
+              <h3>Multi-outlet</h3>
+              <p>Compare revenue and margin across every outlet from one place, with each location grounded in its own numbers.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         INTEGRATIONS — row of source tiles (logo-free)
+    ============================================================ -->
+    <section class="section" id="integrations">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Works with your files</p>
+          <h2 class="h2">No new tools to adopt.</h2>
+          <p class="lede">Bring the files you already keep. MetricAi reads what you have today, so there is nothing new to learn or migrate.</p>
+        </div>
+        <div class="intg-row reveal">
+
+          <div class="intg-item">
+            <div class="intg-tile" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 13h6M9 17h6"/></svg>
+            </div>
+            <h3>CSV files</h3>
+            <p>The exports you already pull from your billing or POS.</p>
+          </div>
+
+          <div class="intg-item">
+            <div class="intg-tile" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M8 11l3 5m0-5l-3 5"/></svg>
+            </div>
+            <h3>Excel (XLSX)</h3>
+            <p>The sales and purchase sheets you maintain every month.</p>
+          </div>
+
+          <div class="intg-item">
+            <div class="intg-tile" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10l-6 10-3-5 6-10z"/><path d="M6 20h12l3-5h-12z"/><path d="M15 5H9l6 10h6z"/></svg>
+            </div>
+            <h3>Google Drive</h3>
+            <p>Sync straight from the Drive folder where your files live.</p>
+          </div>
+
+          <div class="intg-item">
+            <div class="intg-tile" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
+            </div>
+            <h3>Postgres</h3>
+            <p>The isolated engine your data lands in once ingested.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECURITY & TRUST (three-up grid)
+    ============================================================ -->
+    <section class="section" id="security">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Security &amp; trust</p>
+          <h2 class="h2">Guardrails before the first query runs.</h2>
+          <p class="lede">Your data is isolated, every query is checked before it runs, and access stays locked to your account.</p>
+        </div>
+        <div class="grid3 reveal">
+          <div class="cell">
+            <div class="cell__index">01</div>
+            <h4>Tenant isolation</h4>
+            <p>Every account gets its own Postgres schema. Your data lives in its own schema and is not stored in shared tables with other accounts.</p>
+          </div>
+          <div class="cell">
+            <div class="cell__index">02</div>
+            <h4>Validated SQL</h4>
+            <p>A validation layer inspects every query before it runs and blocks anything that writes or modifies data. Queries run only inside your own schema.</p>
+          </div>
+          <div class="cell">
+            <div class="cell__index">03</div>
+            <h4>Authenticated access</h4>
+            <p>Token-based authentication with bcrypt-hashed passwords. Passwords are never stored in plain text.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FAQ — two-column accordion list
+    ============================================================ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">FAQ</p>
+          <h2 class="h2">Questions, answered.</h2>
+          <p class="lede">Short answers to what small-business owners ask before their first upload.</p>
+        </div>
+        <div class="faq-grid reveal">
+
+          <details class="faq-item">
+            <summary>Do I need to know SQL or build formulas?<svg class="faq-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>
+            <div class="faq-answer">No. You ask questions in plain English and an agent writes and validates the SQL for you. There are no formulas, pivot tables, or query languages to learn.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What file formats can I upload?<svg class="faq-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>
+            <div class="faq-answer">CSV and Excel (XLSX) files, the sales and purchase exports you already keep. You can upload them directly or sync them from a Google Drive folder, and the structure is inferred on ingest.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is my data private and isolated from other accounts?<svg class="faq-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>
+            <div class="faq-answer">Yes. Each account gets its own isolated Postgres schema, so your data is not stored in shared tables with other accounts. Access is protected by token authentication and bcrypt-hashed passwords.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How fast are answers?<svg class="faq-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>
+            <div class="faq-answer">Seconds. You ask a question and the response streams back live as the agent works, returning a grounded number, a short narrative, and the right chart without waiting on a report cycle.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I know the numbers are correct?<svg class="faq-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>
+            <div class="faq-answer">Every answer is grounded in real rows from your own uploaded data, not generated from guesswork. The agent writes SQL, validates it before running, and blocks any query that would write or modify data. Queries execute only inside your account's isolated schema.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I use it on my own data without a team setup?<svg class="faq-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>
+            <div class="faq-answer">Yes. Each account is a single owner account with its own isolated Postgres schema. You sign in, connect your files, and ask questions against your own data — no team configuration or seat management to set up.</div>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FINAL CTA BAND
+    ============================================================ -->
+    <section class="cta">
+      <div class="container reveal">
+        <h2 class="h2">Start asking better questions of your data.</h2>
+        <p class="lede">Upload a spreadsheet, ask a question, and get a grounded answer in seconds.</p>
+        <div class="cta__actions">
+          <a class="btn btn--primary" href="https://agentic-ai-livid-eta.vercel.app">Get started <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="btn btn--secondary" href="#how-it-works">See how it works</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__row">
+        <div class="footer__brand">
+          <span class="sigma" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="#34d399" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M37 10H13l12 14-12 14h24"/>
+            </svg>
+          </span>
+          <span class="footer__name">MetricAi</span>
+          <span class="footer__tag">Plain-English analytics for your business data.</span>
+        </div>
+        <nav class="footer__links" aria-label="Footer">
+          <a href="#product">Product</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#use-cases">Use cases</a>
+          <a href="#faq">FAQ</a>
+          <a href="#security">Security</a>
+          <a href="mailto:contact@metricai.in">contact@metricai.in</a>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2026 MetricAi. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCRIPT — subtle fade-up reveals + smooth-scroll
+  ============================================================ -->
+  <script>
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var els = document.querySelectorAll('.reveal');
+
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('is-visible'); });
+      } else {
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        els.forEach(function (el) { obs.observe(el); });
+      }
+
+      // "See it in action" — overlay play button toggles with video state
+      var adVideo = document.getElementById('adVideo');
+      var adPlay = document.getElementById('adPlay');
+      if (adVideo && adPlay) {
+        adPlay.addEventListener('click', function () { adVideo.play(); });
+        adVideo.addEventListener('play', function () { adPlay.classList.add('is-hidden'); });
+        adVideo.addEventListener('pause', function () { if (!adVideo.ended) adPlay.classList.remove('is-hidden'); });
+        adVideo.addEventListener('ended', function () { adPlay.classList.remove('is-hidden'); });
+      }
+
+      // Smooth-scroll for same-page anchors (honors reduced-motion)
+      document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          var id = link.getAttribute('href');
+          if (id.length < 2) return;
+          var target = document.querySelector(id);
+          if (!target) return;
+          ev.preventDefault();
+          target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
