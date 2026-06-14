@@ -86,7 +86,6 @@
         radial-gradient(ellipse 1000px 700px at 100% 50%, #14122a, transparent 55%),
         radial-gradient(ellipse 900px 600px at 0% 100%, #0c1a22, transparent 55%),
         #0a1018;
-      background-attachment: fixed;
       position: relative;
       overflow-x: hidden;
       color: var(--text-body);
@@ -97,19 +96,6 @@
       font-size: 16px;
       line-height: 1.65;
     }
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 28px 28px;
-      opacity: 0.8;
-      pointer-events: none;
-      z-index: 1;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
-      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
-    }
-
     /* ============================================================
        ANIMATED BACKGROUND BLOBS
     ============================================================ */
@@ -123,66 +109,31 @@
     .bg-blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.35;
+      filter: blur(35px);
+      opacity: 0.5;
       will-change: transform;
-      mix-blend-mode: screen;
     }
     .bg-blob--1 {
-      width: 820px; height: 820px;
-      background: radial-gradient(circle at 35% 35%, #10b981 0%, #047857 40%, transparent 70%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle at 35% 35%, #10b981, transparent 70%);
       top: -220px; left: -180px;
-      animation: blobDrift1 22s ease-in-out infinite;
+      animation: blobDrift1 60s ease-in-out infinite;
     }
     .bg-blob--2 {
-      width: 760px; height: 760px;
-      background: radial-gradient(circle at 60% 40%, #8b5cf6 0%, #4c1d95 40%, transparent 70%);
+      width: 560px; height: 560px;
+      background: radial-gradient(circle at 35% 35%, #8b5cf6, transparent 70%);
       top: 18%; right: -260px;
-      animation: blobDrift2 28s ease-in-out infinite;
-    }
-    .bg-blob--3 {
-      width: 700px; height: 700px;
-      background: radial-gradient(circle at 50% 50%, #f59e0b 0%, #b45309 40%, transparent 70%);
-      bottom: -220px; left: 25%;
-      animation: blobDrift3 26s ease-in-out infinite;
-    }
-    .bg-blob--4 {
-      width: 660px; height: 660px;
-      background: radial-gradient(circle at 50% 50%, #06b6d4 0%, #155e75 40%, transparent 70%);
-      top: 58%; right: 14%;
-      animation: blobDrift4 30s ease-in-out infinite;
-    }
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 64px 64px;
-      mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 25%, transparent 85%);
-      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 25%, transparent 85%);
+      animation: blobDrift2 75s ease-in-out infinite;
     }
     @keyframes blobDrift1 {
       0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      33% { transform: translate3d(120px, 80px, 0) scale(1.1); }
-      66% { transform: translate3d(60px, 180px, 0) scale(0.95); }
+      33% { transform: translate3d(60px, 40px, 0) scale(1.1); }
+      66% { transform: translate3d(30px, 90px, 0) scale(0.95); }
     }
     @keyframes blobDrift2 {
       0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      33% { transform: translate3d(-100px, 100px, 0) scale(1.08); }
-      66% { transform: translate3d(-180px, -60px, 0) scale(0.92); }
-    }
-    @keyframes blobDrift3 {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      33% { transform: translate3d(-140px, -80px, 0) scale(1.05); }
-      66% { transform: translate3d(80px, -160px, 0) scale(1.12); }
-    }
-    @keyframes blobDrift4 {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      33% { transform: translate3d(100px, -120px, 0) scale(0.95); }
-      66% { transform: translate3d(-80px, 80px, 0) scale(1.1); }
+      33% { transform: translate3d(-50px, 50px, 0) scale(1.08); }
+      66% { transform: translate3d(-90px, -30px, 0) scale(0.92); }
     }
     h1, h2, h3, h4, p { margin: 0; }
     a { color: inherit; text-decoration: none; }
@@ -253,9 +204,7 @@
        BOX — bordered card container for major page sections
     ============================================================ */
     .box {
-      background: rgba(17, 24, 39, 0.78);
-      backdrop-filter: saturate(120%) blur(20px);
-      -webkit-backdrop-filter: saturate(120%) blur(20px);
+      background: #111827;
       border: 1px solid rgba(31, 41, 55, 0.85);
       border-radius: 20px;
       padding: clamp(40px, 6vw, 80px) clamp(28px, 5vw, 64px);
@@ -267,11 +216,11 @@
     .box--accent-frame {
       box-shadow: inset 0 1px 0 var(--accent-border);
     }
-    /* HERO box — strengthen inner emerald halo over frosted base */
+    /* HERO box — strengthen inner emerald halo over solid base */
     .box.hero {
       background:
         radial-gradient(ellipse 760px 380px at 50% 30%, rgba(16,185,129,0.14), transparent 65%),
-        rgba(17, 24, 39, 0.82);
+        #111827;
       box-shadow:
         inset 0 1px 0 rgba(16,185,129,0.35),
         0 1px 2px rgba(0,0,0,0.3),
@@ -281,34 +230,31 @@
     .box.feature-1 {
       background:
         radial-gradient(ellipse 500px 300px at 0% 0%, rgba(16,185,129,0.06), transparent 60%),
-        rgba(17, 24, 39, 0.78);
+        #111827;
     }
     /* FEATURE 2 (ingestion) — warm amber tint */
     .box.feature-2 {
       background:
         radial-gradient(ellipse 600px 400px at 100% 0%, rgba(245,158,11,0.06), transparent 60%),
-        rgba(17, 24, 39, 0.78);
+        #13192a;
     }
     /* FEATURE 3 (assistant chat) — cool indigo tint */
     .box.feature-3 {
       background:
         radial-gradient(ellipse 500px 350px at 0% 100%, rgba(99,102,241,0.06), transparent 60%),
-        rgba(17, 24, 39, 0.78);
+        #101626;
     }
     /* SECURITY box — soft mint with stronger emerald hairline top */
     .box.security {
       background:
         radial-gradient(ellipse 1000px 400px at 50% 0%, rgba(16,185,129,0.05), transparent 60%),
-        rgba(17, 24, 39, 0.82);
+        #101824;
       box-shadow:
         inset 0 1px 0 rgba(16,185,129,0.35);
     }
-    /* Mockup boxes inside features — soft depth shadow */
+    /* Mockup boxes inside features — single-layer depth shadow */
     .box .mk-win {
-      box-shadow:
-        0 1px 2px rgba(0,0,0,0.3),
-        0 12px 32px -8px rgba(0,0,0,0.45),
-        0 24px 64px -16px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
     }
     .section + .section { margin-top: clamp(32px, 5vw, 64px); }
     .section:first-of-type { margin-top: 24px; }
@@ -698,7 +644,7 @@
       background:
         radial-gradient(ellipse 900px 500px at 50% 100%, rgba(16,185,129,0.18), transparent 65%),
         linear-gradient(180deg, rgba(16,185,129,0.06), transparent 70%),
-        rgba(17, 24, 39, 0.82);
+        #111827;
       box-shadow:
         inset 0 1px 0 rgba(16,185,129,0.45),
         0 1px 2px rgba(0,0,0,0.3);
@@ -1231,40 +1177,15 @@
     }
 
     /* ============================================================
-       INTERACTIVE 3D — hero spotlight + feature tilt
+       FEATURE BOX TRANSITIONS
     ============================================================ */
-    .box.hero {
-      position: relative;
-      overflow: hidden;
-    }
-    .box.hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        400px circle at var(--mx, 50%) var(--my, 30%),
-        rgba(16, 185, 129, 0.18),
-        transparent 60%
-      );
-      pointer-events: none;
-      transition: background 0.15s ease;
-      z-index: 0;
-    }
-    .box.hero > * { position: relative; z-index: 1; }
-
     .box.feature-1, .box.feature-2, .box.feature-3 {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform-style: preserve-3d;
-      perspective: 1000px;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
-    /* Reduced-motion: freeze blobs + drop tilt transitions */
+    /* Reduced-motion: freeze blobs */
     @media (prefers-reduced-motion: reduce) {
       .bg-blob { animation: none !important; }
-      .box.feature-1, .box.feature-2, .box.feature-3 {
-        transition: none !important;
-        transform: none !important;
-      }
     }
   </style>
 </head>
@@ -1276,9 +1197,6 @@
   <div class="bg-blobs" aria-hidden="true">
     <div class="bg-blob bg-blob--1"></div>
     <div class="bg-blob bg-blob--2"></div>
-    <div class="bg-blob bg-blob--3"></div>
-    <div class="bg-blob bg-blob--4"></div>
-    <div class="bg-grid"></div>
   </div>
 
   <!-- ============================================================
@@ -1738,41 +1656,6 @@
       });
     })();
 
-    // Cursor-following spotlight on the hero box
-    (function spotlightHero() {
-      var hero = document.querySelector('.box.hero');
-      if (!hero) return;
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      hero.addEventListener('pointermove', function (e) {
-        var r = hero.getBoundingClientRect();
-        var x = ((e.clientX - r.left) / r.width) * 100;
-        var y = ((e.clientY - r.top) / r.height) * 100;
-        hero.style.setProperty('--mx', x + '%');
-        hero.style.setProperty('--my', y + '%');
-      });
-      hero.addEventListener('pointerleave', function () {
-        hero.style.setProperty('--mx', '50%');
-        hero.style.setProperty('--my', '30%');
-      });
-    })();
-
-    // Subtle 3D tilt on feature boxes
-    (function tiltBoxes() {
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.querySelectorAll('.box.feature-1, .box.feature-2, .box.feature-3').forEach(function (box) {
-        box.addEventListener('pointermove', function (e) {
-          var r = box.getBoundingClientRect();
-          var x = ((e.clientX - r.left) / r.width) - 0.5;
-          var y = ((e.clientY - r.top) / r.height) - 0.5;
-          var tiltX = -y * 2;
-          var tiltY = x * 2;
-          box.style.transform = 'perspective(1000px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) translateZ(0)';
-        });
-        box.addEventListener('pointerleave', function () {
-          box.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-        });
-      });
-    })();
   </script>
 
 </body>
