@@ -1187,6 +1187,50 @@
     @media (prefers-reduced-motion: reduce) {
       .bg-blob { animation: none !important; }
     }
+
+    /* ============================================================
+       DEMO VIDEO BLOCK
+    ============================================================ */
+    .box.demo {
+      padding: clamp(28px, 4vw, 56px) clamp(20px, 4vw, 56px);
+      background: var(--bg-mid);
+    }
+    .demo__head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 32px;
+    }
+    .demo__head .kicker { margin-bottom: 14px; }
+    .demo__head h2 {
+      font-size: clamp(32px, 4.5vw, 48px);
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+    .demo__head p {
+      margin-top: 14px;
+      color: var(--text-body);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .video-block {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-inset);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .video-block video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: #000;
+    }
   </style>
 </head>
 <body>
@@ -1242,7 +1286,7 @@
         </p>
         <div class="hero__cta reveal">
           <a class="btn btn--primary" href="https://agentic-ai-livid-eta.vercel.app">Get started — it's free <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
-          <a class="btn btn--secondary" href="#product">See it in action <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="btn btn--secondary" href="#demo">See it in action <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
         </div>
 
         <!-- Hero visual — Mockup A: AI assistant -->
@@ -1291,6 +1335,27 @@
           </div>
         </div>
       </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DEMO VIDEO — 60-second product walkthrough
+    ============================================================ -->
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="box demo reveal">
+          <div class="demo__head">
+            <div class="kicker">See it in action</div>
+            <h2 class="h2">60 seconds with MetricAi.</h2>
+            <p>A quick look at how a plain-English question becomes a grounded answer — with the chart, the narrative, and the source rows behind it.</p>
+          </div>
+          <div class="video-block">
+            <video controls preload="none" playsinline aria-label="MetricAi product walkthrough">
+              <source src="metric-ai-ad.mp4" type="video/mp4" />
+              Your browser does not support embedded video. <a href="metric-ai-ad.mp4">Download the clip</a>.
+            </video>
+          </div>
         </div>
       </div>
     </section>
@@ -1586,7 +1651,7 @@
           <p class="lede">Upload a spreadsheet, ask a question, and get a grounded answer in seconds.</p>
           <div class="cta__actions">
             <a class="btn btn--primary" href="https://agentic-ai-livid-eta.vercel.app">Get started — it's free <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
-            <a class="btn btn--secondary" href="#product">See it in action <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn--secondary" href="#demo">See it in action <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
       </div>
