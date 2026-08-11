@@ -638,6 +638,29 @@
     }
 
     /* ============================================================
+       CONTACT / SUPPORT — 2-up grid of direct channels
+    ============================================================ */
+    .box.contact {
+      background:
+        radial-gradient(ellipse 1000px 400px at 50% 0%, rgba(16,185,129,0.05), transparent 60%),
+        #101824;
+      box-shadow:
+        inset 0 1px 0 rgba(16,185,129,0.35);
+    }
+    .grid2 {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      box-shadow: inset 0 1px 0 var(--accent-border);
+    }
+    a.cell { display: block; }
+    a.cell h4 { overflow-wrap: anywhere; }
+
+    /* ============================================================
        CTA BAND — boxed with soft emerald gradient inside
     ============================================================ */
     .cta {
@@ -714,8 +737,23 @@
       margin-top: 24px;
       padding-top: 20px;
       border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 24px;
+      flex-wrap: wrap;
     }
     .footer__copy { font-size: 12px; color: var(--text-faint); }
+    .footer__contact {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+    .footer__contact a { color: var(--text-muted); transition: color 0.15s ease; }
+    .footer__contact a:hover { color: var(--text-body); }
 
     /* ============================================================
        REVEAL ANIMATION
@@ -747,11 +785,11 @@
       }
       .feature--rev .feature__media { order: 0; }
       .feature__text, .feature__media { max-width: 100%; }
-      .grid3 { grid-template-columns: 1fr; }
+      .grid3, .grid2 { grid-template-columns: 1fr; }
       .cell { padding: 32px 28px; }
       .box { border-radius: 16px; }
       .cta { border-radius: 18px; }
-      .grid3 { border-radius: 16px; }
+      .grid3, .grid2 { border-radius: 16px; }
     }
     @media (max-width: 760px) {
       .nav__links { display: none; }
@@ -1261,6 +1299,7 @@
         <a class="nav__link" href="#product">Product</a>
         <a class="nav__link" href="#how-it-works">How it works</a>
         <a class="nav__link" href="#security">Security</a>
+        <a class="nav__link" href="#contact">Contact</a>
       </nav>
 
       <div class="nav__right">
@@ -1641,6 +1680,35 @@
     </section>
 
     <!-- ============================================================
+         CONTACT / SUPPORT
+    ============================================================ -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="box contact">
+        <div class="section-head reveal">
+          <p class="kicker kicker--dot">Support &amp; contact</p>
+          <h2 class="h2">Talk to a real person.</h2>
+          <p class="lede">Questions, feedback, or help getting your data in — you reach the developer directly, not a ticket queue. Every message gets a personal reply.</p>
+        </div>
+        <div class="grid2 reveal">
+          <a class="cell cell--emerald" href="mailto:ayanv3419@gmail.com">
+            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6l9 -6"/></svg></span>
+            <div class="cell__index">Email</div>
+            <h4>ayanv3419@gmail.com</h4>
+            <p>Best for support questions, feedback, and onboarding help. Attach a screenshot or your spreadsheet and it gets sorted faster.</p>
+          </a>
+          <a class="cell cell--indigo" href="tel:+919023505664">
+            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"/></svg></span>
+            <div class="cell__index">Phone</div>
+            <h4>+91 90235 05664</h4>
+            <p>For quick questions, or to book a live walkthrough of MetricAi with your own data.</p>
+          </a>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
          FINAL CTA BAND
     ============================================================ -->
     <section class="section">
@@ -1677,11 +1745,17 @@
         <nav class="footer__links" aria-label="Footer">
           <a href="#product">Product</a>
           <a href="#security">Security</a>
+          <a href="#contact">Contact</a>
           <a href="https://agentic-ai-livid-eta.vercel.app">Sign in</a>
         </nav>
       </div>
       <div class="footer__bottom">
         <p class="footer__copy">&copy; 2026 MetricAi. All rights reserved.</p>
+        <p class="footer__contact">
+          <a href="mailto:ayanv3419@gmail.com">ayanv3419@gmail.com</a>
+          <span aria-hidden="true">&middot;</span>
+          <a href="tel:+919023505664">+91 90235 05664</a>
+        </p>
       </div>
     </div>
   </footer>
