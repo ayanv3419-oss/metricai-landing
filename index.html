@@ -85,8 +85,8 @@
     .plan li i{ color:var(--gold); margin-top:3px; }
     .plan .cin-btn{ justify-content:center; margin-top:auto; }
     /* demo video frame */
-    .video-frame{ max-width:900px; margin:0 auto; border-radius:var(--radius); overflow:hidden; border:1px solid var(--glass-line); background:#04100e; box-shadow:0 40px 90px rgba(0,0,0,.6); }
-    .video-frame video{ width:100%; display:block; aspect-ratio:16/9; background:#04100e; }
+    .video-frame{ max-width:400px; margin:0 auto; border-radius:var(--radius); overflow:hidden; border:1px solid var(--glass-line); background:#04100e; box-shadow:0 40px 90px rgba(0,0,0,.6); }
+    .video-frame video{ width:100%; display:block; aspect-ratio:9/16; background:#04100e; object-fit:cover; }
   </style>
 </head>
 <body class="cin">
@@ -153,7 +153,7 @@
         <p>A plain-English question becomes a grounded answer — with the chart, the narrative and the source rows behind it.</p>
       </div>
       <div class="video-frame reveal">
-        <video controls preload="none" playsinline poster="images/poster.jpg" aria-label="MetricAi product walkthrough">
+        <video controls preload="metadata" playsinline aria-label="MetricAi product walkthrough">
           <source src="metric-ai-ad.mp4" type="video/mp4">
           Your browser does not support embedded video. <a href="metric-ai-ad.mp4">Download the clip</a>.
         </video>
