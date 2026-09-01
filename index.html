@@ -1,1801 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MetricAi — Ask your data, get grounded answers</title>
-  <meta name="description" content="MetricAi is an AI analytics platform for small businesses. Upload your sales data, ask questions in plain English, and get grounded answers, narratives, and charts in seconds — no SQL required." />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="MetricAi — Ask your data, get grounded answers" />
-  <meta property="og:description" content="Upload your sales data, ask questions in plain English, and get a real number, a narrative, and a chart in seconds. Every query validated before it runs. Your data stays isolated." />
-  <meta property="og:url" content="https://agentic-ai-livid-eta.vercel.app" />
-  <meta property="og:site_name" content="MetricAi" />
-  <meta property="og:image" content="https://agentic-ai-livid-eta.vercel.app/og.png" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="MetricAi — Ask your data, get grounded answers" />
-  <meta name="twitter:description" content="Upload your sales data, ask questions in plain English, and get a real number, a narrative, and a chart in seconds. Every query validated before it runs." />
-  <meta name="twitter:image" content="https://agentic-ai-livid-eta.vercel.app/og.png" />
-
-  <!-- Inline SVG favicon: Sigma mark -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%2309090b'/%3E%3Cpath d='M37 10H13l12 14-12 14h24' fill='none' stroke='%2334d399' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-
-  <!-- Fonts -->
+  <meta name="description" content="MetricAi turns plain-English questions into real numbers, a clear narrative and the right chart — grounded in the rows you uploaded. Built for shop owners.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/cinematic.css">
   <style>
-    /* ============================================================
-       TOKENS — DARK THEME (deep slate-blue)
-    ============================================================ */
-    :root {
-      /* surfaces */
-      --bg-deep:       #0a1018;
-      --bg-mid:        #111827;
-      --bg-elev:       #1a2433;
-      --bg:            #0a1018;
-      --bg-soft:       #111827;
-      --bg-card:       #1a2433;
-      --bg-inset:      #0e1623;
-
-      /* borders */
-      --border:        #1f2937;
-      --border-strong: #2d3748;
-
-      /* text */
-      --text-primary:  #f1f5f9;
-      --text-body:     #cbd5e1;
-      --text-muted:    #94a3b8;
-      --text-faint:    #64748b;
-
-      /* brand */
-      --accent:        #10b981;
-      --accent-bright: #34d399;
-      --accent-deep:   #047857;
-      --accent-dim:    rgba(16,185,129,0.10);
-      --accent-border: rgba(16,185,129,0.28);
-      --accent-tint:   rgba(16,185,129,0.05);
-
-      /* radii */
-      --r-sm: 6px;
-      --r-md: 8px;
-      --r-lg: 12px;
-
-      /* spacing */
-      --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
-      --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
-
-      /* shadows */
-      --shadow-card: 0 1px 2px rgba(0,0,0,0.25), 0 8px 24px rgba(0,0,0,0.35);
-      --shadow-mock: 0 1px 3px rgba(0,0,0,0.30), 0 16px 40px rgba(0,0,0,0.45);
-    }
-
-    /* ============================================================
-       RESET / BASE
-    ============================================================ */
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      background:
-        radial-gradient(ellipse 1400px 800px at 50% -100px, #131b2e, transparent 60%),
-        radial-gradient(ellipse 1000px 700px at 100% 50%, #14122a, transparent 55%),
-        radial-gradient(ellipse 900px 600px at 0% 100%, #0c1a22, transparent 55%),
-        #0a1018;
-      position: relative;
-      overflow-x: hidden;
-      color: var(--text-body);
-      font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
-      font-feature-settings: 'cv11','ss01','ss03';
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-size: 16px;
-      line-height: 1.65;
-    }
-    /* ============================================================
-       ANIMATED BACKGROUND BLOBS
-    ============================================================ */
-    .bg-blobs {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .bg-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(35px);
-      opacity: 0.5;
-      will-change: transform;
-    }
-    .bg-blob--1 {
-      width: 600px; height: 600px;
-      background: radial-gradient(circle at 35% 35%, #10b981, transparent 70%);
-      top: -220px; left: -180px;
-      animation: blobDrift1 60s ease-in-out infinite;
-    }
-    .bg-blob--2 {
-      width: 560px; height: 560px;
-      background: radial-gradient(circle at 35% 35%, #8b5cf6, transparent 70%);
-      top: 18%; right: -260px;
-      animation: blobDrift2 75s ease-in-out infinite;
-    }
-    @keyframes blobDrift1 {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      33% { transform: translate3d(60px, 40px, 0) scale(1.1); }
-      66% { transform: translate3d(30px, 90px, 0) scale(0.95); }
-    }
-    @keyframes blobDrift2 {
-      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-      33% { transform: translate3d(-50px, 50px, 0) scale(1.08); }
-      66% { transform: translate3d(-90px, -30px, 0) scale(0.92); }
-    }
-    h1, h2, h3, h4, p { margin: 0; }
-    a { color: inherit; text-decoration: none; }
-    ul { margin: 0; padding: 0; list-style: none; }
-    img, svg { display: block; }
-    ::selection { background: rgba(16,185,129,0.30); color: #ffffff; }
-
-    :focus-visible {
-      outline: 2px solid var(--accent-bright);
-      outline-offset: 2px;
-      border-radius: 3px;
-    }
-
-    /* ============================================================
-       LAYOUT PRIMITIVES
-    ============================================================ */
-    .container {
-      max-width: 1200px;
-      margin-inline: auto;
-      padding-inline: 24px;
-      position: relative;
-      z-index: 1;
-    }
-    .section {
-      padding-block: 0;
-      scroll-margin-top: 80px;
-    }
-    #top { scroll-margin-top: 80px; }
-    .section-head {
-      max-width: 720px;
-      margin-bottom: 56px;
-    }
-    .kicker {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent-bright);
-      margin-bottom: 22px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .kicker--dot::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .h2 {
-      font-size: clamp(36px, 5vw, 60px);
-      font-weight: 600;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-    }
-    .lede {
-      margin-top: 22px;
-      font-size: 17px;
-      line-height: 1.65;
-      color: var(--text-body);
-      max-width: 660px;
-    }
-
-    /* ============================================================
-       BOX — bordered card container for major page sections
-    ============================================================ */
-    .box {
-      background: #111827;
-      border: 1px solid rgba(31, 41, 55, 0.85);
-      border-radius: 20px;
-      padding: clamp(40px, 6vw, 80px) clamp(28px, 5vw, 64px);
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-    }
-    .box--soft { background: var(--bg-soft); }
-    .box--accent-frame {
-      box-shadow: inset 0 1px 0 var(--accent-border);
-    }
-    /* HERO box — strengthen inner emerald halo over solid base */
-    .box.hero {
-      background:
-        radial-gradient(ellipse 760px 380px at 50% 30%, rgba(16,185,129,0.14), transparent 65%),
-        #111827;
-      box-shadow:
-        inset 0 1px 0 rgba(16,185,129,0.35),
-        0 1px 2px rgba(0,0,0,0.3),
-        0 24px 60px -20px rgba(0,0,0,0.4);
-    }
-    /* FEATURE 1 (dashboard) — soft top-left emerald glow */
-    .box.feature-1 {
-      background:
-        radial-gradient(ellipse 500px 300px at 0% 0%, rgba(16,185,129,0.06), transparent 60%),
-        #111827;
-    }
-    /* FEATURE 2 (ingestion) — warm amber tint */
-    .box.feature-2 {
-      background:
-        radial-gradient(ellipse 600px 400px at 100% 0%, rgba(245,158,11,0.06), transparent 60%),
-        #13192a;
-    }
-    /* FEATURE 3 (assistant chat) — cool indigo tint */
-    .box.feature-3 {
-      background:
-        radial-gradient(ellipse 500px 350px at 0% 100%, rgba(99,102,241,0.06), transparent 60%),
-        #101626;
-    }
-    /* SECURITY box — soft mint with stronger emerald hairline top */
-    .box.security {
-      background:
-        radial-gradient(ellipse 1000px 400px at 50% 0%, rgba(16,185,129,0.05), transparent 60%),
-        #101824;
-      box-shadow:
-        inset 0 1px 0 rgba(16,185,129,0.35);
-    }
-    /* Mockup boxes inside features — single-layer depth shadow */
-    .box .mk-win {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    .section + .section { margin-top: clamp(32px, 5vw, 64px); }
-    .section:first-of-type { margin-top: 24px; }
-    .section:last-of-type { margin-bottom: clamp(32px, 5vw, 64px); }
-
-    /* ============================================================
-       NAV
-    ============================================================ */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      height: 64px;
-      background: rgba(10, 16, 24, 0.78);
-      backdrop-filter: saturate(140%) blur(16px);
-      -webkit-backdrop-filter: saturate(140%) blur(16px);
-      border-bottom: 1px solid rgba(31, 41, 55, 0.7);
-    }
-    .nav__inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-      border-radius: var(--r-md);
-      transition: opacity 0.15s ease;
-    }
-    .brand:hover { opacity: 0.78; }
-    .brand:focus-visible {
-      outline: 2px solid var(--accent-bright);
-      outline-offset: 3px;
-    }
-    .sigma {
-      width: 28px;
-      height: 28px;
-      border-radius: var(--r-md);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .sigma svg { width: 14px; height: 14px; filter: drop-shadow(0 0 3px rgba(16,185,129,0.9)) drop-shadow(0 0 7px rgba(16,185,129,0.5)); }
-    .brand__name {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: -0.01em;
-    }
-    .nav__links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-    .nav__link {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-body);
-      transition: color 0.15s ease;
-    }
-    .nav__link:hover { color: var(--text-primary); }
-    .nav__right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
-    }
-    .nav__signin {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-body);
-      transition: color 0.15s ease;
-    }
-    .nav__signin:hover { color: var(--text-primary); }
-
-    /* ============================================================
-       BUTTONS
-    ============================================================ */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      border-radius: var(--r-sm);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
-    }
-    .btn--primary {
-      background: linear-gradient(135deg, #10b981, #047857);
-      color: #052e1f;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      padding: 10px 20px;
-      border: 1px solid var(--accent);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.15) inset,
-        0 4px 14px -2px rgba(16,185,129,0.45),
-        0 2px 4px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-    .btn--primary:hover {
-      background: linear-gradient(135deg, #34d399, #10b981);
-      border-color: var(--accent-bright);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.2) inset,
-        0 8px 24px -2px rgba(16,185,129,0.55),
-        0 2px 4px rgba(0,0,0,0.25);
-      transform: translateY(-1px);
-    }
-    .btn--primary:active { transform: translateY(0); }
-    .btn--secondary {
-      background: rgba(255,255,255,0.04);
-      color: var(--text-primary);
-      font-weight: 500;
-      padding: 10px 20px;
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .btn--secondary:hover {
-      background: rgba(255,255,255,0.07);
-      border-color: rgba(255,255,255,0.18);
-    }
-    .btn--sm {
-      padding: 7px 14px;
-      font-size: 13px;
-    }
-    .btn__arrow { font-weight: 600; }
-
-    /* ============================================================
-       HERO
-    ============================================================ */
-    .hero {
-      position: relative;
-      text-align: center;
-      box-shadow: inset 0 1px 0 rgba(16,185,129,0.35);
-    }
-    /* soft emerald halo behind the headline (tightened to sit behind H1) */
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 820px;
-      height: 380px;
-      background: radial-gradient(ellipse at center, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.04) 38%, transparent 68%);
-      filter: blur(50px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .hero__inner {
-      position: relative;
-      z-index: 1;
-      max-width: 820px;
-      margin: 0 auto;
-    }
-    .hero__eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent-bright);
-      background: rgba(16,185,129,0.06);
-      border: 1px solid var(--accent-border);
-      padding: 7px 16px;
-      border-radius: 999px;
-      margin-bottom: 32px;
-    }
-    .hero__eyebrow::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .hero h1 {
-      font-size: clamp(48px, 7.5vw, 92px);
-      font-weight: 600;
-      line-height: 1.0;
-      letter-spacing: -0.035em;
-      color: var(--text-primary);
-      max-width: 880px;
-      margin-inline: auto;
-    }
-    /* accent-bright keeps AA contrast on dark background */
-    .hero h1 .accent-text { color: var(--accent-bright); }
-    .hero__sub {
-      margin: 28px auto 0;
-      font-size: 19px;
-      font-weight: 400;
-      line-height: 1.6;
-      color: var(--text-body);
-      max-width: 580px;
-    }
-    .hero__cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      justify-content: center;
-      margin-top: 40px;
-    }
-    .hero__media {
-      position: relative;
-      max-width: 960px;
-      margin: 72px auto 0;
-      z-index: 1;
-    }
-    /* The mockup inside the hero box gets a softer hairline since the box already frames it */
-    .hero__media .mk-win {
-      border-color: var(--border);
-    }
-
-    /* ============================================================
-       TRUST STRIP — slim pill-box
-    ============================================================ */
-    .strip {
-      display: flex;
-      justify-content: center;
-    }
-    .strip__pill {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 8px 16px;
-      background: rgba(16,185,129,0.06);
-      border: 1px solid rgba(16,185,129,0.25);
-      border-radius: 999px;
-      padding: 14px 28px;
-      max-width: 100%;
-    }
-    .strip__item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-body);
-      white-space: nowrap;
-    }
-    .strip__item svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--accent-bright); }
-    .strip__sep {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.10);
-    }
-
-    /* ============================================================
-       FEATURE DEEP-DIVE
-    ============================================================ */
-    .feature {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(48px, 8vw, 120px);
-      align-items: center;
-    }
-    .feature--rev .feature__media { order: -1; }
-    .feature__text { max-width: 520px; }
-    .feature__body {
-      margin-top: 22px;
-      font-size: 16px;
-      line-height: 1.65;
-      color: var(--text-body);
-    }
-    .checklist {
-      margin-top: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .checklist li {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      font-size: 15px;
-      color: var(--text-body);
-    }
-    .checklist svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      margin-top: 4px;
-      color: var(--accent-bright);
-    }
-    /* Mockups inside a box drop their own outer border — the box frames them */
-    .box .feature__media .mk-win {
-      border-color: var(--border);
-    }
-
-    /* ============================================================
-       3-UP SECURITY GRID
-    ============================================================ */
-    .grid3 {
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      box-shadow: inset 0 1px 0 var(--accent-border);
-    }
-    .cell {
-      background: rgba(17,24,39,0.6);
-      padding: 40px;
-      transition: background 0.15s ease;
-    }
-    .cell:hover { background: rgba(17,24,39,0.78); }
-    /* Tinted cells — emerald / indigo / amber */
-    .cell--emerald {
-      background: linear-gradient(180deg, rgba(16,185,129,0.07), transparent 70%), rgba(17,24,39,0.6);
-    }
-    .cell--indigo {
-      background: linear-gradient(180deg, rgba(99,102,241,0.07), transparent 70%), rgba(17,24,39,0.6);
-    }
-    .cell--amber {
-      background: linear-gradient(180deg, rgba(245,158,11,0.07), transparent 70%), rgba(17,24,39,0.6);
-    }
-    .cell__icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(16,185,129,0.10);
-      border: 1px solid rgba(16,185,129,0.30);
-      color: var(--accent-bright);
-      margin-bottom: 14px;
-      line-height: 0;
-    }
-    .cell__icon svg { width: 18px; height: 18px; display: block; }
-    /* Indigo / amber icon variants for cells 2 and 3 */
-    .cell--indigo .cell__icon {
-      color: #818cf8;
-      background: rgba(99,102,241,0.10);
-      border-color: rgba(99,102,241,0.30);
-    }
-    .cell--amber .cell__icon {
-      color: #fbbf24;
-      background: rgba(245,158,11,0.10);
-      border-color: rgba(245,158,11,0.30);
-    }
-    .cell--indigo .cell__index { color: #818cf8; }
-    .cell--amber .cell__index { color: #fbbf24; }
-    .cell__index {
-      font-family: ui-monospace, 'SF Mono', Consolas, monospace;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      color: var(--accent-bright);
-      text-transform: uppercase;
-    }
-    .cell h4 {
-      margin-top: 14px;
-      font-size: 21px;
-      font-weight: 600;
-      line-height: 1.3;
-      letter-spacing: -0.015em;
-      color: var(--text-primary);
-    }
-    .cell p {
-      margin-top: 12px;
-      font-size: 15px;
-      line-height: 1.65;
-      color: var(--text-body);
-    }
-
-    /* ============================================================
-       CONTACT / SUPPORT — 2-up grid of direct channels
-    ============================================================ */
-    .box.contact {
-      background:
-        radial-gradient(ellipse 1000px 400px at 50% 0%, rgba(16,185,129,0.05), transparent 60%),
-        #101824;
-      box-shadow:
-        inset 0 1px 0 rgba(16,185,129,0.35);
-    }
-    .grid2 {
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--border);
-      box-shadow: inset 0 1px 0 var(--accent-border);
-    }
-    a.cell { display: block; }
-    a.cell h4 { overflow-wrap: anywhere; }
-
-    /* ============================================================
-       CTA BAND — boxed with soft emerald gradient inside
-    ============================================================ */
-    .cta {
-      background:
-        radial-gradient(ellipse 900px 500px at 50% 100%, rgba(16,185,129,0.18), transparent 65%),
-        linear-gradient(180deg, rgba(16,185,129,0.06), transparent 70%),
-        #111827;
-      box-shadow:
-        inset 0 1px 0 rgba(16,185,129,0.45),
-        0 1px 2px rgba(0,0,0,0.3);
-      border-radius: 24px;
-      text-align: center;
-    }
-    .cta h2 {
-      font-size: clamp(40px, 6vw, 72px);
-      font-weight: 600;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      max-width: 820px;
-      margin-inline: auto;
-    }
-    .cta .lede { margin-inline: auto; }
-    .cta__actions {
-      margin-top: 44px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-    }
-
-    /* ============================================================
-       FOOTER
-    ============================================================ */
-    .footer {
-      margin-top: clamp(32px, 5vw, 64px);
-      border-top: 1px solid rgba(31, 41, 55, 0.7);
-      padding: 36px 24px 28px;
-      background: linear-gradient(180deg, transparent, rgba(10,16,24,0.5));
-      position: relative;
-      z-index: 1;
-    }
-    .footer__inner { max-width: 1200px; margin: 0 auto; }
-    .footer__row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .footer__brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .footer .sigma { width: 22px; height: 22px; border-radius: var(--r-md); }
-    .footer .sigma svg { width: 11px; height: 11px; }
-    .footer__name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-    .footer__tag { font-size: 13px; color: var(--text-muted); }
-    .footer__links {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .footer__links a {
-      font-size: 13px;
-      color: var(--text-muted);
-      transition: color 0.15s ease;
-    }
-    .footer__links a:hover { color: var(--text-body); }
-    .footer__bottom {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px 24px;
-      flex-wrap: wrap;
-    }
-    .footer__copy { font-size: 12px; color: var(--text-faint); }
-    .footer__contact {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 12px;
-      color: var(--text-faint);
-    }
-    .footer__contact a { color: var(--text-muted); transition: color 0.15s ease; }
-    .footer__contact a:hover { color: var(--text-body); }
-
-    /* ============================================================
-       REVEAL ANIMATION
-    ============================================================ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
-      html { scroll-behavior: auto; }
-    }
-
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
-    @media (max-width: 860px) {
-      .section-head { margin-bottom: 40px; }
-      .hero__sub { font-size: 17px; }
-      .hero__media { margin-top: 56px; }
-      .feature {
-        grid-template-columns: 1fr;
-        gap: 48px;
-      }
-      .feature--rev .feature__media { order: 0; }
-      .feature__text, .feature__media { max-width: 100%; }
-      .grid3, .grid2 { grid-template-columns: 1fr; }
-      .cell { padding: 32px 28px; }
-      .box { border-radius: 16px; }
-      .cta { border-radius: 18px; }
-      .grid3, .grid2 { border-radius: 16px; }
-    }
-    @media (max-width: 760px) {
-      .nav__links { display: none; }
-    }
-    @media (max-width: 640px) {
-      .footer__row { flex-direction: column; align-items: flex-start; gap: 24px; }
-      .mk-body { padding: 14px; }
-    }
-
-    /* ============================================================
-       MOCKUP STYLES (prefixed mk-) — DARK THEME
-    ============================================================ */
-    .mk-win{
-      background:var(--bg-inset);
-      border:1px solid var(--border);
-      border-radius:var(--r-lg);
-      box-shadow: var(--shadow-mock);
-      overflow:hidden;
-      font-family:'Inter',-apple-system,system-ui,sans-serif;
-      color: var(--text-primary);
-      -webkit-font-smoothing:antialiased;
-    }
-    /* Inline-SVG icon wrapper */
-    .ti{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;font-size:1em;flex:0 0 auto;line-height:0}
-    .ti svg{width:1em;height:1em;display:block;stroke:currentColor;fill:none}
-    .mk-bar{
-      height:38px;
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:0 14px;
-      border-bottom:1px solid var(--border);
-      background:var(--bg-deep);
-    }
-    .mk-dots{display:flex;gap:7px}
-    .mk-dot{width:9px;height:9px;border-radius:50%;background:var(--border-strong)}
-    .mk-url{
-      margin-left:auto;
-      background:var(--bg-elev);
-      border-radius:6px;
-      font-family:ui-monospace,'SF Mono',Consolas,monospace;
-      font-size:11.5px;
-      color:var(--text-muted);
-      padding:4px 12px;
-    }
-    .mk-body{background:var(--bg-inset);padding:22px}
-    .mk-pos{color:#34d399}
-    .mk-neg{color:#f87171}
-
-    /* ---- A: assistant chat ---- */
-    .mk-chat{display:flex;flex-direction:column;gap:16px}
-    .mk-urow{display:flex;justify-content:flex-end}
-    .mk-ubub{
-      background:var(--bg-elev);
-      border:1px solid var(--border);
-      color:var(--text-primary);
-      font-size:13.5px;
-      line-height:1.5;
-      padding:10px 14px;
-      border-radius:8px;
-      max-width:78%;
-    }
-    .mk-arow{display:flex;gap:11px;align-items:flex-start}
-    .mk-av{
-      flex:0 0 28px;
-      width:28px;
-      height:28px;
-      border-radius:8px;
-      background:rgba(16,185,129,0.12);
-      border:1px solid rgba(16,185,129,0.35);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#34d399;
-      font-size:14px;
-      margin-top:2px;
-    }
-    .mk-abody{flex:1;min-width:0}
-    .mk-intro{
-      font-size:13.5px;
-      line-height:1.55;
-      color:var(--text-body);
-      margin-bottom:13px;
-    }
-    .mk-intro strong{color:var(--text-primary);font-weight:600}
-    .mk-card{
-      background:var(--bg-inset);
-      border:1px solid var(--border);
-      border-radius:8px;
-      overflow:hidden;
-      overflow-x:auto;
-      -webkit-overflow-scrolling:touch;
-    }
-    .mk-tbl{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12.5px;
-      font-family:ui-monospace,'SF Mono',Consolas,monospace;
-    }
-    .mk-tbl thead th{
-      font-size:10.5px;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      font-weight:500;
-      text-align:left;
-      padding:9px 14px;
-      border-bottom:1px solid var(--border);
-      background:var(--bg-elev);
-      font-family:'Inter',sans-serif;
-    }
-    .mk-tbl thead th.mk-r,.mk-tbl td.mk-r{text-align:right}
-    .mk-tbl tbody td{
-      padding:9px 14px;
-      border-bottom:1px solid var(--border);
-      color:var(--text-body);
-    }
-    .mk-tbl tbody tr:last-child td{border-bottom:none}
-    .mk-tbl .mk-pn{color:var(--text-body);font-variant-numeric:tabular-nums}
-    .mk-tbl .mk-rev{
-      color:var(--text-primary);
-      font-variant-numeric:tabular-nums;
-      font-weight:500;
-    }
-    .mk-charttitle{
-      font-size:11px;
-      color:var(--text-muted);
-      margin:18px 2px 11px;
-      display:flex;
-      align-items:center;
-      gap:7px;
-      letter-spacing:.02em;
-    }
-    .mk-charttitle .ti{font-size:13px;color:#34d399}
-    .mk-bars{display:flex;flex-direction:column;gap:9px}
-    .mk-brow{
-      display:grid;
-      grid-template-columns:96px 1fr auto;
-      align-items:center;
-      gap:11px;
-    }
-    .mk-blab{
-      font-size:11.5px;
-      color:var(--text-muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .mk-btrack{
-      height:9px;
-      background:var(--border);
-      border-radius:3px;
-      overflow:hidden;
-    }
-    .mk-bfill{
-      height:100%;
-      background:#10b981;
-      border-radius:3px;
-    }
-    .mk-bval{
-      font-size:11.5px;
-      color:var(--text-primary);
-      font-variant-numeric:tabular-nums;
-      min-width:62px;
-      text-align:right;
-    }
-    .mk-insight{
-      margin-top:14px;
-      padding-top:13px;
-      border-top:1px solid var(--border);
-      font-size:12px;
-      color:var(--text-muted);
-      line-height:1.55;
-      display:flex;
-      gap:8px;
-      align-items:flex-start;
-    }
-    .mk-insight .ti{
-      color:#34d399;
-      font-size:14px;
-      margin-top:1px;
-      flex:0 0 auto;
-    }
-
-    /* ---- B: dashboard ---- */
-    .mk-kpis{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:12px;
-      margin-bottom:16px;
-    }
-    .mk-kpi{
-      background:var(--bg-elev);
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:14px 16px;
-    }
-    .mk-klab{
-      font-size:10.5px;
-      letter-spacing:.4px;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      margin-bottom:10px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      font-weight:500;
-    }
-    .mk-klab .ti{font-size:13px;color:var(--text-faint)}
-    .mk-knum{
-      font-size:22px;
-      font-weight:600;
-      letter-spacing:-.3px;
-      color:var(--text-primary);
-      font-variant-numeric:tabular-nums;
-      line-height:1;
-    }
-    .mk-kdelta{
-      font-size:11.5px;
-      margin-top:10px;
-      font-variant-numeric:tabular-nums;
-      display:flex;
-      align-items:center;
-      gap:4px;
-      font-weight:500;
-    }
-    .mk-kdelta .ti{font-size:13px}
-    .mk-grid2{
-      display:grid;
-      grid-template-columns:1.85fr 1fr;
-      gap:14px;
-    }
-    .mk-panel{
-      background:var(--bg-elev);
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:16px 18px;
-    }
-    .mk-phead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:6px;
-    }
-    .mk-ptitle{
-      font-size:12.5px;
-      color:var(--text-primary);
-      font-weight:600;
-      letter-spacing:-.01em;
-    }
-    .mk-ptag{
-      font-size:10px;
-      color:#34d399;
-      background:rgba(16,185,129,0.10);
-      border:1px solid rgba(16,185,129,0.30);
-      padding:2px 8px;
-      border-radius:6px;
-      letter-spacing:.3px;
-      font-weight:500;
-    }
-    .mk-psub{
-      font-size:10.5px;
-      color:var(--text-muted);
-      margin-bottom:12px;
-    }
-    .mk-chartwrap{position:relative;padding-left:34px}
-    .mk-xaxis{
-      display:flex;
-      justify-content:space-between;
-      margin-top:7px;
-      padding:0 2px;
-    }
-    .mk-xaxis span{font-size:10px;color:var(--text-faint)}
-    .mk-yax{
-      position:absolute;
-      left:0;
-      top:0;
-      height:140px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      pointer-events:none;
-    }
-    .mk-yax span{font-size:9.5px;color:var(--text-faint);line-height:1}
-    .mk-toplist{display:flex;flex-direction:column;gap:13px}
-    .mk-tlhead{
-      display:flex;
-      justify-content:space-between;
-      align-items:baseline;
-      margin-bottom:6px;
-    }
-    .mk-tlname{font-size:11.5px;color:var(--text-body);font-weight:500}
-    .mk-tlval{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums}
-    .mk-tltrack{
-      height:6px;
-      background:var(--border);
-      border-radius:3px;
-      overflow:hidden;
-    }
-    .mk-tlfill{
-      height:100%;
-      background:#10b981;
-      border-radius:3px;
-      opacity:.92;
-    }
-
-    /* ---- C: pipeline ---- */
-    .mk-src{display:flex;flex-direction:column;gap:10px}
-    .mk-srow{
-      display:flex;
-      align-items:center;
-      gap:13px;
-      background:var(--bg-elev);
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:13px 16px;
-    }
-    .mk-sicon{
-      flex:0 0 36px;
-      width:36px;
-      height:36px;
-      border-radius:8px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:18px;
-    }
-    .mk-sicon.xls{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);color:#34d399}
-    .mk-sicon.csv{background:var(--bg-inset);border:1px solid var(--border);color:var(--text-muted)}
-    .mk-sicon.drv{background:var(--bg-inset);border:1px solid var(--border);color:var(--text-muted)}
-    .mk-sinfo{flex:1;min-width:0}
-    .mk-sname{
-      font-size:13px;
-      color:var(--text-primary);
-      font-weight:500;
-      display:flex;
-      align-items:center;
-      gap:9px;
-      flex-wrap:wrap;
-    }
-    .mk-srows{
-      font-size:11px;
-      color:var(--text-muted);
-      font-weight:400;
-      font-variant-numeric:tabular-nums;
-    }
-    .mk-smeta{
-      font-size:11px;
-      color:var(--text-muted);
-      margin-top:4px;
-      display:flex;
-      align-items:center;
-      gap:7px;
-    }
-    .mk-sdot{
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      flex:0 0 auto;
-    }
-    .mk-sdot.ok{background:#10b981}
-    .mk-status{
-      font-size:11px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      flex:0 0 auto;
-      padding-left:6px;
-      font-weight:500;
-    }
-    .mk-status.ok{color:#34d399}
-    .mk-status .ti{font-size:14px}
-    .mk-schema{
-      margin-top:14px;
-      background:var(--bg-inset);
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:14px 16px;
-    }
-    .mk-schtop{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      margin-bottom:12px;
-    }
-    .mk-schtop .ti{font-size:14px;color:#34d399}
-    .mk-schtop span{font-size:11px;color:var(--text-muted);letter-spacing:.2px;font-weight:500;text-transform:uppercase}
-    .mk-tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap:7px;
-      margin-bottom:12px;
-    }
-    .mk-tag{
-      font-size:11px;
-      color:var(--text-body);
-      background:var(--bg-elev);
-      border:1px solid var(--border);
-      border-radius:6px;
-      padding:4px 9px;
-      font-variant-numeric:tabular-nums;
-    }
-    .mk-tag .ti{font-size:12px;color:var(--text-muted);margin-right:5px;vertical-align:-1px}
-    .mk-schfoot{
-      font-size:11.5px;
-      color:var(--text-muted);
-      border-top:1px solid var(--border);
-      padding-top:10px;
-      display:flex;
-      align-items:center;
-      gap:7px;
-    }
-    .mk-schfoot b{color:var(--text-body);font-weight:500}
-    .mk-schfoot .ti{font-size:14px;color:#34d399}
-
-    @media(max-width:560px){
-      .mk-kpis{grid-template-columns:repeat(2,1fr)}
-      .mk-grid2{grid-template-columns:1fr}
-      .mk-brow{grid-template-columns:80px 1fr auto}
-    }
-    @media(max-width:380px){
-      .mk-kpis{grid-template-columns:1fr}
-    }
-
-    /* ============================================================
-       FEATURE BOX TRANSITIONS
-    ============================================================ */
-    .box.feature-1, .box.feature-2, .box.feature-3 {
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    /* Reduced-motion: freeze blobs */
-    @media (prefers-reduced-motion: reduce) {
-      .bg-blob { animation: none !important; }
-    }
-
-    /* ============================================================
-       DEMO VIDEO BLOCK
-    ============================================================ */
-    .box.demo {
-      padding: clamp(28px, 4vw, 56px) clamp(20px, 4vw, 56px);
-      background: var(--bg-mid);
-    }
-    .demo__head {
-      text-align: center;
-      max-width: 640px;
-      margin: 0 auto 32px;
-    }
-    .demo__head .kicker { margin-bottom: 14px; }
-    .demo__head h2 {
-      font-size: clamp(32px, 4.5vw, 48px);
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-    }
-    .demo__head p {
-      margin-top: 14px;
-      color: var(--text-body);
-      font-size: 16px;
-      line-height: 1.6;
-    }
-    .video-block {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--bg-inset);
-      border: 1px solid var(--border);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    .video-block video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-      background: #000;
-    }
+    /* MetricAi — emerald accent over the cinematic system */
+    .cin{ --gold:#34d399; --gold-2:#10b981; --gold-deep:#059669; --cyan:#6ee7b7; }
+    .cin-btn--gold{ background:linear-gradient(180deg,#34d399,#059669); color:#04140d; }
+    .cin-btn--gold:hover{ background:linear-gradient(180deg,#4ade9f,#0a7a52); color:#04140d; }
+    .cin a.cin-btn--gold{ color:#04140d; }
+    /* nav hugs the corners (full-width, not the centered 1240 container) */
+    .cin-nav .cin-container{ max-width:none; padding-left:clamp(18px,3.2vw,46px); padding-right:clamp(18px,3.2vw,46px); }
+    /* HERO: crystal on the RIGHT, its left edge MASKED so it dissolves into the
+       dark with no hard seam — like the reference. Scrolling past the hero
+       reveals the crystal centred (the fixed site-wide background). */
+    .cin-hero{ background:var(--bg-0); }
+    .cin-hero-video{ left:auto; right:0; width:min(66vw,1080px);
+      -webkit-mask-image:linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 26%, #000 58%);
+      mask-image:linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 26%, #000 58%); }
+    .cin-hero::before{ background:linear-gradient(90deg, var(--bg-0) 0%, rgba(5,12,13,.55) 30%, transparent 58%); }
+    @media (max-width:860px){
+      .cin-hero-video{ width:100%; opacity:.5; -webkit-mask-image:none; mask-image:none; }
+      .cin-hero::before{ background:linear-gradient(180deg, rgba(5,12,13,.42) 0%, rgba(5,12,13,.72) 55%, var(--bg-0) 92%); }
+    }
+    /* crystal crests */
+    .cin-brand .crest, .cin-foot .crest{ padding:0; overflow:hidden; background:#06110f; }
+    .cin-brand .crest img, .cin-foot .crest img{ width:100%; height:100%; object-fit:cover; }
+    .cin-loader .crest{ width:90px; height:90px; margin:0 auto; border-radius:22px; overflow:hidden; border:1px solid var(--gold); }
+    .cin-loader .crest img{ width:100%; height:100%; object-fit:cover; }
+    /* two-column feature block (mirrors cin-exp grid) */
+    .cin-two{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+    .cin-two .lead{ color:var(--muted); margin:18px 0 26px; font-size:17px; }
+    @media (max-width:1024px){ .cin-two{ grid-template-columns:1fr; gap:40px; } }
+    /* ask panel */
+    .ask{ background:linear-gradient(180deg,var(--bg-2),var(--bg-1)); border:1px solid var(--glass-line); border-radius:var(--radius); padding:26px; }
+    .ask-q{ display:flex; gap:12px; font-size:18px; color:#fff; padding-bottom:18px; border-bottom:1px solid var(--glass-line); }
+    .ask-q .cur{ color:var(--gold); font-weight:700; }
+    .ask .say{ color:var(--muted); font-size:14.5px; margin:18px 0; }
+    .ask table{ width:100%; border-collapse:collapse; font-size:14px; }
+    .ask th{ text-align:left; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted-2); font-weight:700; padding-bottom:10px; }
+    .ask th.r, .ask td.r{ text-align:right; }
+    .ask td{ padding:10px 0; border-top:1px solid rgba(255,255,255,.05); font-variant-numeric:tabular-nums; color:var(--muted); }
+    .ask td.p{ color:#fff; font-weight:500; }
+    .ask .up{ color:#5fe0a0; } .ask .dn{ color:#e8776b; }
+    .ask .g{ margin-top:16px; font-size:12.5px; color:var(--muted-2); }
+    .ask .g b{ color:var(--gold); font-weight:600; }
+    /* kpi dashboard */
+    .kpi-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+    @media (max-width:760px){ .kpi-grid{ grid-template-columns:repeat(2,1fr); } }
+    .kpi{ background:var(--glass); border:1px solid var(--glass-line); border-radius:var(--radius); padding:24px; position:relative; overflow:hidden; }
+    .kpi::before{ content:""; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+    .kpi .l{ font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted-2); font-weight:700; }
+    .kpi .n{ font-family:'Playfair Display',serif; font-size:32px; color:#fff; margin:10px 0 4px; font-variant-numeric:tabular-nums; }
+    .kpi .c{ font-size:12.5px; } .kpi .c.up{ color:#5fe0a0; } .kpi .c.dn{ color:#e8776b; }
+    .kpi svg{ margin-top:14px; width:100%; height:40px; display:block; }
+    /* file cards */
+    .files{ display:flex; flex-direction:column; gap:12px; }
+    .file{ display:flex; align-items:center; gap:14px; padding:15px; border-radius:12px; background:var(--glass); border:1px solid var(--glass-line); }
+    .file .fi{ width:40px; height:40px; border-radius:10px; background:linear-gradient(140deg,var(--bg-3),var(--bg-1)); border:1px solid var(--gold); display:grid; place-items:center; color:var(--gold); flex:none; }
+    .file b{ color:#fff; font-family:'Inter'; font-weight:600; font-size:14.5px; display:block; }
+    .file .m{ color:var(--muted-2); font-size:12.5px; }
+    .file .bd{ margin-left:auto; font-size:11px; color:var(--gold); border:1px solid var(--glass-line); border-radius:30px; padding:4px 11px; white-space:nowrap; }
+    /* pricing */
+    .plans{ display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:820px; margin:0 auto; }
+    @media (max-width:620px){ .plans{ grid-template-columns:1fr; } }
+    .plan{ background:linear-gradient(180deg,var(--bg-2),var(--bg-1)); border:1px solid var(--glass-line); border-radius:var(--radius); padding:34px; display:flex; flex-direction:column; position:relative; }
+    .plan.pro{ border-color:var(--gold); box-shadow:0 30px 70px rgba(16,185,129,.18); }
+    .plan .tag{ position:absolute; top:-12px; right:24px; font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; color:#04140d; background:linear-gradient(135deg,var(--gold),var(--gold-2)); padding:5px 13px; border-radius:30px; }
+    .plan .pn{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700; }
+    .plan .pc{ font-family:'Playfair Display',serif; font-size:46px; color:#fff; margin:14px 0 2px; }
+    .plan .pc small{ font-family:'Inter'; font-size:15px; color:var(--muted-2); }
+    .plan .ps{ color:var(--muted-2); font-size:13px; margin-bottom:22px; }
+    .plan ul{ list-style:none; padding:0; margin:0 0 26px; display:grid; gap:12px; }
+    .plan li{ display:flex; gap:11px; color:var(--muted); font-size:14.5px; }
+    .plan li i{ color:var(--gold); margin-top:3px; }
+    .plan .cin-btn{ justify-content:center; margin-top:auto; }
+    /* demo video frame */
+    .video-frame{ max-width:900px; margin:0 auto; border-radius:var(--radius); overflow:hidden; border:1px solid var(--glass-line); background:#04100e; box-shadow:0 40px 90px rgba(0,0,0,.6); }
+    .video-frame video{ width:100%; display:block; aspect-ratio:16/9; background:#04100e; }
   </style>
 </head>
-<body>
+<body class="cin">
 
-  <!-- ============================================================
-       ANIMATED BACKGROUND BLOBS
-  ============================================================ -->
-  <div class="bg-blobs" aria-hidden="true">
-    <div class="bg-blob bg-blob--1"></div>
-    <div class="bg-blob bg-blob--2"></div>
+  <!-- Loader -->
+  <div class="cin-loader">
+    <div class="cin-loader-inner">
+      <div class="crest"><img src="images/logo.png" alt=""></div>
+      <div class="word">METRIC AI</div>
+      <div class="bar"><i></i></div>
+    </div>
   </div>
 
-  <!-- ============================================================
-       NAV
-  ============================================================ -->
-  <header class="nav">
-    <div class="nav__inner">
-      <a class="brand" href="#top" aria-label="MetricAi home">
-        <span class="sigma" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M37 10H13l12 14-12 14h24"/>
-          </svg>
-        </span>
-        <span class="brand__name">MetricAi</span>
+  <!-- Nav -->
+  <header class="cin-nav">
+    <div class="cin-container">
+      <a href="#home" class="cin-brand">
+        <span class="crest"><img src="images/logo.png" alt="MetricAi crystal logo"></span>
+        <span><b>MetricAi</b><small>AI Analytics</small></span>
       </a>
-
-      <nav class="nav__links" aria-label="Primary">
-        <a class="nav__link" href="#product">Product</a>
-        <a class="nav__link" href="#how-it-works">How it works</a>
-        <a class="nav__link" href="#security">Security</a>
-        <a class="nav__link" href="#contact">Contact</a>
+      <nav class="cin-links">
+        <a href="#ask">How it works</a>
+        <a href="#dash">Dashboard</a>
+        <a href="#trust">Trust</a>
+        <a href="#pricing">Pricing</a>
       </nav>
-
-      <div class="nav__right">
-        <a class="nav__signin" href="https://agentic-ai-livid-eta.vercel.app">Sign in</a>
-        <a class="btn btn--primary btn--sm" href="https://agentic-ai-livid-eta.vercel.app">Get started</a>
+      <div class="cin-nav-actions">
+        <a href="https://agentic-ai-livid-eta.vercel.app" class="cin-btn cin-btn--gold cin-btn--sm"><i class="fas fa-bolt"></i> Start free trial</a>
+        <button class="cin-burger" aria-label="Menu"><i class="fas fa-bars"></i></button>
       </div>
     </div>
   </header>
 
-  <main id="top">
-
-    <!-- ============================================================
-         HERO
-    ============================================================ -->
-    <section class="section">
-      <div class="container">
-        <div class="box hero">
-      <div class="hero__inner">
-        <div class="hero__eyebrow reveal">Agentic analytics for small business</div>
-        <h1 class="reveal">Ask your data anything. <span class="accent-text">Get answers you can trust.</span></h1>
-        <p class="hero__sub reveal">
-          MetricAi turns plain-English questions into real numbers, a clear narrative, and the right chart. Every query is validated before it touches your data — so the answer you see is grounded in the rows you uploaded.
-        </p>
-        <div class="hero__cta reveal">
-          <a class="btn btn--primary" href="https://agentic-ai-livid-eta.vercel.app">Get started — it's free <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
-          <a class="btn btn--secondary" href="#demo">See it in action <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+  <!-- Hero -->
+  <section class="cin-hero" id="home">
+    <video class="cin-hero-video" autoplay muted loop playsinline poster="images/poster.jpg">
+      <source src="images/hero-abstract.mp4" type="video/mp4">
+    </video>
+    <div class="cin-container">
+      <div class="cin-hero-copy">
+        <span class="cin-eyebrow reveal">Your shop's AI analyst</span>
+        <h1 class="reveal" data-d="1"><span>Every rupee,</span><span class="cin-shine">finally in focus.</span></h1>
+        <p class="lead reveal" data-d="2">Ask anything about your business and get back a real number, a plain-English answer, and the chart behind it — grounded in your data, never guessed.</p>
+        <div class="cin-hero-btns reveal" data-d="3">
+          <a href="https://agentic-ai-livid-eta.vercel.app" class="cin-btn cin-btn--gold"><i class="fas fa-bolt"></i> Start free trial</a>
+          <a href="#demo" class="cin-btn cin-btn--glass"><i class="fas fa-play"></i> See it in action</a>
         </div>
+        <div class="cin-hero-meta reveal" data-d="4">
+          <div><i class="fas fa-circle-check"></i> No made-up numbers</div>
+          <div><i class="fas fa-shield-halved"></i> Every query validated</div>
+          <div><i class="fas fa-lock"></i> Isolated per tenant</div>
+        </div>
+      </div>
+    </div>
+    <div class="cin-scroll"><span>Scroll</span><span class="mouse"></span></div>
+  </section>
 
-        <!-- Hero visual — Mockup A: AI assistant -->
-        <div class="hero__media reveal">
-          <div class="mk-win" aria-label="MetricAi assistant answering a question with a data table and chart">
-            <div class="mk-bar">
-              <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
-              <div class="mk-url" aria-hidden="true">app.metricai.in</div>
-            </div>
-            <div class="mk-body">
-              <div class="mk-chat">
-                <div class="mk-urow">
-                  <div class="mk-ubub">What were my top 5 products by revenue last month?</div>
-                </div>
-                <div class="mk-arow">
-                  <div class="mk-av" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6 6 6 0 0 1 -6 -6 6 6 0 0 1 -6 6 6 6 0 0 1 6 6z"/></svg></span></div>
-                  <div class="mk-abody">
-                    <div class="mk-intro">Here are your highest-revenue products for May 2026, with month-over-month change.</div>
-                    <div class="mk-card">
-                      <table class="mk-tbl">
-                        <thead>
-                          <tr><th>Product</th><th class="mk-r">Revenue</th><th class="mk-r">Change</th></tr>
-                        </thead>
-                        <tbody>
-                          <tr><td class="mk-pn">Aashirvaad Atta 10kg</td><td class="mk-r mk-rev">&#8377;4,82,300</td><td class="mk-r mk-pos">+14.2%</td></tr>
-                          <tr><td class="mk-pn">Tata Salt 1kg</td><td class="mk-r mk-rev">&#8377;3,91,750</td><td class="mk-r mk-pos">+8.6%</td></tr>
-                          <tr><td class="mk-pn">Amul Gold Milk 1L</td><td class="mk-r mk-rev">&#8377;3,12,480</td><td class="mk-r mk-neg">&#8722;3.1%</td></tr>
-                          <tr><td class="mk-pn">Fortune Oil 5L</td><td class="mk-r mk-rev">&#8377;2,84,500</td><td class="mk-r mk-pos">+6.9%</td></tr>
-                          <tr><td class="mk-pn">Maggi Noodles 12-pk</td><td class="mk-r mk-rev">&#8377;2,18,920</td><td class="mk-r mk-neg">&#8722;1.8%</td></tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="mk-charttitle"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1zm12 -5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v11a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1zm-6 -3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1zM4 20h14"/></svg></span>Top products — May 2026</div>
-                    <div class="mk-bars">
-                      <div class="mk-brow"><div class="mk-blab">Aashirvaad Atta</div><div class="mk-btrack"><div class="mk-bfill" style="width:100%;opacity:1"></div></div><div class="mk-bval">&#8377;4,82,300</div></div>
-                      <div class="mk-brow"><div class="mk-blab">Tata Salt</div><div class="mk-btrack"><div class="mk-bfill" style="width:81%;opacity:.85"></div></div><div class="mk-bval">&#8377;3,91,750</div></div>
-                      <div class="mk-brow"><div class="mk-blab">Amul Gold Milk</div><div class="mk-btrack"><div class="mk-bfill" style="width:65%;opacity:.7"></div></div><div class="mk-bval">&#8377;3,12,480</div></div>
-                      <div class="mk-brow"><div class="mk-blab">Fortune Oil</div><div class="mk-btrack"><div class="mk-bfill" style="width:59%;opacity:.55"></div></div><div class="mk-bval">&#8377;2,84,500</div></div>
-                      <div class="mk-brow"><div class="mk-blab">Maggi Noodles</div><div class="mk-btrack"><div class="mk-bfill" style="width:45%;opacity:.42"></div></div><div class="mk-bval">&#8377;2,18,920</div></div>
-                    </div>
-                    <div class="mk-insight"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h1m8 -9v1m8 8h1M5.6 5.6l.7 .7m12.1 -.7l-.7 .7M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3M9.7 17h4.6"/></svg></span><span>Atta and salt staples drove 52% of top-5 revenue. Amul Gold Milk slipped 3.1% month over month — the only top-5 product to decline.</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <!-- Demo video -->
+  <section class="cin-section" id="demo">
+    <div class="cin-container">
+      <div class="cin-head reveal">
+        <span class="cin-eyebrow" style="justify-content:center">See it in action</span>
+        <h2>60 seconds with <span class="cin-gold">MetricAi.</span></h2>
+        <p>A plain-English question becomes a grounded answer — with the chart, the narrative and the source rows behind it.</p>
+      </div>
+      <div class="video-frame reveal">
+        <video controls preload="none" playsinline poster="images/poster.jpg" aria-label="MetricAi product walkthrough">
+          <source src="metric-ai-ad.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="metric-ai-ad.mp4">Download the clip</a>.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ask -->
+  <section class="cin-section" id="ask">
+    <div class="cin-container">
+      <div class="cin-two">
+        <div class="reveal left">
+          <span class="cin-eyebrow">Ask in plain English</span>
+          <h2>A real answer in <span class="cin-gold">seconds.</span></h2>
+          <p class="lead">Ask the way you'd ask an analyst. An agent picks the right steps, writes the SQL, validates it, and streams back a number, a short narrative, and the chart behind it — no formulas, no pivot tables.</p>
+          <div class="cin-feats">
+            <div class="cin-feat"><i class="fas fa-comment-dots"></i><div><b>Plain-English questions</b><span>"What were my top products last month?" — just ask.</span></div></div>
+            <div class="cin-feat"><i class="fas fa-table-cells-large"></i><div><b>Real numbers, every time</b><span>Answers cite the actual rows in your data.</span></div></div>
+            <div class="cin-feat"><i class="fas fa-bolt"></i><div><b>Streamed live</b><span>Watch the answer build as the agent works.</span></div></div>
+          </div>
+        </div>
+        <div class="ask reveal right" data-d="2">
+          <div class="ask-q"><span class="cur">&rsaquo;</span> What were my top 5 products by revenue last month?</div>
+          <p class="say">Here are your highest-revenue products for May 2026, with month-over-month change.</p>
+          <table>
+            <thead><tr><th>Product</th><th class="r">Revenue</th><th class="r">Change</th></tr></thead>
+            <tbody>
+              <tr><td class="p">Aashirvaad Atta 10kg</td><td class="r">&#8377;4,82,300</td><td class="r up">+14.2%</td></tr>
+              <tr><td class="p">Tata Salt 1kg</td><td class="r">&#8377;3,91,750</td><td class="r up">+8.6%</td></tr>
+              <tr><td class="p">Amul Gold Milk 1L</td><td class="r">&#8377;3,12,480</td><td class="r dn">&minus;3.1%</td></tr>
+              <tr><td class="p">Fortune Oil 5L</td><td class="r">&#8377;2,84,500</td><td class="r up">+6.9%</td></tr>
+              <tr><td class="p">Maggi Noodles 12-pk</td><td class="r">&#8377;2,18,920</td><td class="r dn">&minus;1.8%</td></tr>
+            </tbody>
+          </table>
+          <p class="g">Atta &amp; salt staples drove 52% of top-5 revenue. Amul Gold slipped 3.1% — the only decliner. <b>Grounded on 4,512 order rows in your data.</b></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="cin-section" id="dash" style="padding-top:0">
+    <div class="cin-container">
+      <div class="cin-head reveal">
+        <span class="cin-eyebrow" style="justify-content:center">Live KPI dashboard</span>
+        <h2>Your whole shop, <span class="cin-gold">at a glance.</span></h2>
+        <p>Revenue, margin, orders and trend — computed straight from the files you uploaded. New data lands, the dashboard moves.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi reveal" data-d="1"><div class="l">Revenue</div><div class="n">&#8377;48.2L</div><div class="c up">&#9650; 12.4%</div>
+          <svg viewBox="0 0 220 40" preserveAspectRatio="none"><defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#34d399" stop-opacity=".35"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></linearGradient></defs><path d="M0,32 40,28 80,29 120,20 160,16 200,9 220,6" fill="none" stroke="#34d399" stroke-width="2"/><path d="M0,32 40,28 80,29 120,20 160,16 200,9 220,6 L220,40 0,40Z" fill="url(#g1)"/></svg></div>
+        <div class="kpi reveal" data-d="2"><div class="l">Gross margin</div><div class="n">31.8%</div><div class="c up">&#9650; 2.1pt</div>
+          <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path d="M0,28 40,26 80,27 120,22 160,23 200,18 220,17" fill="none" stroke="#34d399" stroke-width="2"/></svg></div>
+        <div class="kpi reveal" data-d="3"><div class="l">Orders</div><div class="n">1,847</div><div class="c up">&#9650; 8.9%</div>
+          <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path d="M0,30 40,31 80,24 120,26 160,18 200,14 220,12" fill="none" stroke="#34d399" stroke-width="2"/></svg></div>
+        <div class="kpi reveal" data-d="4"><div class="l">Avg order</div><div class="n">&#8377;2,610</div><div class="c dn">&#9660; 1.2%</div>
+          <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path d="M0,16 40,18 80,17 120,22 160,20 200,25 220,24" fill="none" stroke="#e8776b" stroke-width="2"/></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ingestion -->
+  <section class="cin-section">
+    <div class="cin-container">
+      <div class="cin-two">
+        <div class="files reveal left" data-d="2" style="order:2">
+          <div class="file"><span class="fi"><i class="fas fa-file-excel"></i></span><div><b>sales_2026.xlsx</b><span class="m">12,408 rows &middot; 6 sheets</span></div><span class="bd">Synced</span></div>
+          <div class="file"><span class="fi"><i class="fas fa-file-csv"></i></span><div><b>purchases_q2.csv</b><span class="m">8,112 rows &middot; 1 sheet</span></div><span class="bd">Synced</span></div>
+          <div class="file"><span class="fi"><i class="fab fa-google-drive"></i></span><div><b>Drive &middot; /Finance/Daily</b><span class="m">3 files &middot; synced just now</span></div><span class="bd">Live</span></div>
+        </div>
+        <div class="reveal right">
+          <span class="cin-eyebrow">Drop-in ingestion</span>
+          <h2>From spreadsheet to answers in <span class="cin-gold">one drop.</span></h2>
+          <p class="lead">Drop the CSV or Excel you already keep — or sync from Google Drive. MetricAi infers the columns, types and relationships on upload, so your data is ready to ask the moment it lands.</p>
+          <div class="cin-feats">
+            <div class="cin-feat"><i class="fas fa-file-import"></i><div><b>CSV &amp; Excel</b><span>No reformatting, no template to follow.</span></div></div>
+            <div class="cin-feat"><i class="fas fa-wand-magic-sparkles"></i><div><b>Schema inferred automatically</b><span>Columns, types and links detected on upload.</span></div></div>
+            <div class="cin-feat"><i class="fas fa-database"></i><div><b>Isolated per account</b><span>Your data lives in its own private schema.</span></div></div>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Guardrails -->
+  <section class="cin-section" id="trust" style="padding-top:0">
+    <div class="cin-container">
+      <div class="cin-head reveal">
+        <span class="cin-eyebrow" style="justify-content:center">Built on guardrails</span>
+        <h2>Three things we <span class="cin-gold">don't compromise</span> on.</h2>
+        <p>An answer is only as trustworthy as the system behind it. These hold before any query reaches your data.</p>
+      </div>
+      <div class="cin-svcs">
+        <div class="cin-svc reveal" data-d="1"><div class="ic"><i class="fas fa-anchor"></i></div><h3>Grounded answers</h3><p>Every number on screen traces back to a real row in the file you uploaded — no invented KPIs, no fabricated trends.</p><div class="from">Zero <em>made-up numbers</em></div></div>
+        <div class="cin-svc reveal" data-d="2"><div class="ic"><i class="fas fa-shield-halved"></i></div><h3>Validated execution</h3><p>Every query is dry-run before it touches the database. Anything that would write, mutate or step outside your data is blocked.</p><div class="from">Every query <em>checked first</em></div></div>
+        <div class="cin-svc reveal" data-d="3"><div class="ic"><i class="fas fa-lock"></i></div><h3>Isolated by tenant</h3><p>Your data lives in its own database schema, scoped per request. Your tables are never shared with another account.</p><div class="from">Your data <em>stays yours</em></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Counters -->
+  <section class="cin-section cin-exp" style="padding-top:0">
+    <div class="cin-container" style="grid-template-columns:1fr">
+      <div class="cin-stats reveal" style="grid-template-columns:repeat(4,1fr)">
+        <div class="cin-stat"><b data-count="100000" data-suffix="+">0</b><span>Rows analysed in a demo tenant</span></div>
+        <div class="cin-stat"><b data-count="5" data-suffix="s">0</b><span>Typical time to an answer</span></div>
+        <div class="cin-stat"><b data-count="7" data-suffix="-day">0</b><span>Free trial, no card</span></div>
+        <div class="cin-stat"><b data-count="0">0</b><span>Fabricated numbers</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="cin-section" id="pricing" style="padding-top:0">
+    <div class="cin-container">
+      <div class="cin-head reveal">
+        <span class="cin-eyebrow" style="justify-content:center">Pricing</span>
+        <h2>Start free. Upgrade when it <span class="cin-gold">pays for itself.</span></h2>
+        <p>Seven days on the house — no card. When you're hooked, one flat price, everything included.</p>
+      </div>
+      <div class="plans">
+        <div class="plan reveal" data-d="1">
+          <div class="pn">Free trial</div>
+          <div class="pc">&#8377;0</div>
+          <div class="ps">Full access for 7 days &middot; no card needed</div>
+          <ul>
+            <li><i class="fas fa-check"></i> Every feature, unlocked</li>
+            <li><i class="fas fa-check"></i> Upload &amp; ask unlimited questions</li>
+            <li><i class="fas fa-check"></i> Live dashboard &amp; charts</li>
+          </ul>
+          <a href="https://agentic-ai-livid-eta.vercel.app" class="cin-btn cin-btn--glass">Start free trial</a>
+        </div>
+        <div class="plan pro reveal" data-d="2">
+          <span class="tag">Most popular</span>
+          <div class="pn">Pro</div>
+          <div class="pc">&#8377;1,500<small> / month</small></div>
+          <div class="ps">Everything, no limits &middot; cancel anytime</div>
+          <ul>
+            <li><i class="fas fa-check"></i> Everything in the trial, forever</li>
+            <li><i class="fas fa-check"></i> Google Drive sync &amp; auto-refresh</li>
+            <li><i class="fas fa-check"></i> Direct support from the developer</li>
+          </ul>
+          <a href="https://agentic-ai-livid-eta.vercel.app" class="cin-btn cin-btn--gold"><i class="fas fa-bolt"></i> Go Pro — &#8377;1,500/mo</a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ============================================================
-         DEMO VIDEO — 60-second product walkthrough
-    ============================================================ -->
-    <section class="section" id="demo">
-      <div class="container">
-        <div class="box demo reveal">
-          <div class="demo__head">
-            <div class="kicker">See it in action</div>
-            <h2 class="h2">60 seconds with MetricAi.</h2>
-            <p>A quick look at how a plain-English question becomes a grounded answer — with the chart, the narrative, and the source rows behind it.</p>
-          </div>
-          <div class="video-block">
-            <video controls preload="none" playsinline aria-label="MetricAi product walkthrough">
-              <source src="metric-ai-ad.mp4" type="video/mp4" />
-              Your browser does not support embedded video. <a href="metric-ai-ad.mp4">Download the clip</a>.
-            </video>
-          </div>
+  <!-- CTA -->
+  <section class="cin-cta">
+    <div class="cin-container reveal">
+      <span class="cin-eyebrow" style="justify-content:center">Get started</span>
+      <h2>See what your data's<br><span class="cin-shine">been hiding.</span></h2>
+      <p>Upload your sales sheet, ask your first question, and get a grounded answer in minutes.</p>
+      <div class="cin-cta-btns">
+        <a href="https://agentic-ai-livid-eta.vercel.app" class="cin-btn cin-btn--gold"><i class="fas fa-bolt"></i> Start free trial</a>
+        <a href="tel:+919023505664" class="cin-btn cin-btn--glass"><i class="fas fa-phone"></i> Book a walkthrough</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="cin-foot">
+    <div class="cin-container">
+      <div class="about">
+        <div class="brand-row"><span class="crest"><img src="images/logo.png" alt=""></span><b>MetricAi</b></div>
+        <p>Plain-English analytics for shop owners — upload your sales data, ask a question, and get a grounded answer with the chart behind it.</p>
+        <div class="cin-social">
+          <a href="mailto:ayanv3419@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          <a href="tel:+919023505664" aria-label="Call"><i class="fas fa-phone"></i></a>
         </div>
       </div>
-    </section>
-
-    <!-- ============================================================
-         TRUST STRIP
-    ============================================================ -->
-    <section class="section" aria-label="What you get">
-      <div class="container">
-        <div class="strip">
-          <div class="strip__pill">
-            <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Postgres-backed</span>
-            <span class="strip__sep" aria-hidden="true"></span>
-            <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Schema-per-tenant isolation</span>
-            <span class="strip__sep" aria-hidden="true"></span>
-            <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Every SQL validated</span>
-            <span class="strip__sep" aria-hidden="true"></span>
-            <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>Streamed answers (SSE)</span>
-            <span class="strip__sep" aria-hidden="true"></span>
-            <span class="strip__item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg>No vendor lock-in</span>
-          </div>
-        </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#ask">How it works</a></li>
+          <li><a href="#dash">Dashboard</a></li>
+          <li><a href="#trust">Trust &amp; guardrails</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
       </div>
-    </section>
-
-    <!-- ============================================================
-         FEATURE 1 — KPI DASHBOARD (text left, mockup right)
-    ============================================================ -->
-    <section class="section" id="product">
-      <div class="container">
-        <div class="box feature-1">
-        <div class="feature">
-          <div class="feature__text reveal">
-            <p class="kicker kicker--dot">Live KPI dashboard</p>
-            <h2 class="h2">The numbers that run your business, on one page.</h2>
-            <p class="feature__body">
-              Revenue, margin, orders, and trends — computed straight from the files you uploaded. The moment new data lands, the dashboard reflects it. Nothing to model, nothing to refresh.
-            </p>
-            <ul class="checklist">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Headline KPIs ranked by what actually moved</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Trend lines across any period in your data</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Numbers that always trace back to a real row</span></li>
-            </ul>
-          </div>
-          <div class="feature__media reveal">
-            <div class="mk-win" aria-label="KPI dashboard with revenue, margin, orders, a trend line, and top products">
-              <div class="mk-bar">
-                <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
-                <div class="mk-url" aria-hidden="true">app.metricai.in</div>
-              </div>
-              <div class="mk-body">
-                <div class="mk-kpis">
-                  <div class="mk-kpi">
-                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5h-11h3a4 4 0 0 1 0 8h-3l6 6m-6 -10h11"/></svg></span>Revenue</div>
-                    <div class="mk-knum">&#8377;48.2L</div>
-                    <div class="mk-kdelta mk-pos"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6 -6l4 4l8 -8m-6 0h6v6"/></svg></span>+12.4%</div>
-                  </div>
-                  <div class="mk-kpi">
-                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5l-10 14m1 -13a2 2 0 1 0 0.001 0M17 15a2 2 0 1 0 0.001 0"/></svg></span>Gross margin</div>
-                    <div class="mk-knum">31.8%</div>
-                    <div class="mk-kdelta mk-pos"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6 -6l4 4l8 -8m-6 0h6v6"/></svg></span>+2.1pt</div>
-                  </div>
-                  <div class="mk-kpi">
-                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2zm3 0v-2a3 3 0 0 1 6 0v2"/></svg></span>Orders</div>
-                    <div class="mk-knum">1,847</div>
-                    <div class="mk-kdelta mk-pos"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6 -6l4 4l8 -8m-6 0h6v6"/></svg></span>+8.9%</div>
-                  </div>
-                  <div class="mk-kpi">
-                    <div class="mk-klab"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21v-16a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2zm4 -13h6m-6 4h6m-6 4h4"/></svg></span>Avg order</div>
-                    <div class="mk-knum">&#8377;2,610</div>
-                    <div class="mk-kdelta mk-neg"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l6 6l4 -4l8 8m-6 0h6v-6"/></svg></span>&#8722;1.2%</div>
-                  </div>
-                </div>
-                <div class="mk-grid2">
-                  <div class="mk-panel">
-                    <div class="mk-phead">
-                      <div class="mk-ptitle">Revenue trend</div>
-                      <div class="mk-ptag">+12.4%</div>
-                    </div>
-                    <div class="mk-psub">Monthly net revenue · Dec 2025 – May 2026</div>
-                    <div class="mk-chartwrap">
-                      <div class="mk-yax" aria-hidden="true"><span>50L</span><span>40L</span><span>30L</span><span>20L</span></div>
-                      <svg viewBox="0 0 520 140" width="100%" height="140" preserveAspectRatio="none" style="display:block" role="img" aria-label="Revenue trend line chart rising over six months">
-                        <line x1="0" y1="2" x2="520" y2="2" stroke="#1f2937" stroke-width="1"/>
-                        <line x1="0" y1="47" x2="520" y2="47" stroke="#1f2937" stroke-width="1"/>
-                        <line x1="0" y1="92" x2="520" y2="92" stroke="#1f2937" stroke-width="1"/>
-                        <line x1="0" y1="137" x2="520" y2="137" stroke="#1f2937" stroke-width="1"/>
-                        <polygon points="6,96 110,84 214,90 318,58 422,44 514,26 514,138 6,138" fill="#10b981" fill-opacity="0.12"/>
-                        <polyline points="6,96 110,84 214,90 318,58 422,44 514,26" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="6" cy="96" r="3" fill="#1a2433" stroke="#10b981" stroke-width="2"/>
-                        <circle cx="110" cy="84" r="3" fill="#1a2433" stroke="#10b981" stroke-width="2"/>
-                        <circle cx="214" cy="90" r="3" fill="#1a2433" stroke="#10b981" stroke-width="2"/>
-                        <circle cx="318" cy="58" r="3" fill="#1a2433" stroke="#10b981" stroke-width="2"/>
-                        <circle cx="422" cy="44" r="3" fill="#1a2433" stroke="#10b981" stroke-width="2"/>
-                        <circle cx="514" cy="26" r="3.4" fill="#10b981" stroke="#1a2433" stroke-width="2"/>
-                      </svg>
-                      <div class="mk-xaxis" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span></div>
-                    </div>
-                  </div>
-                  <div class="mk-panel">
-                    <div class="mk-phead"><div class="mk-ptitle">Top products</div></div>
-                    <div class="mk-psub">Share of revenue · May</div>
-                    <div class="mk-toplist">
-                      <div><div class="mk-tlhead"><span class="mk-tlname">Aashirvaad Atta</span><span class="mk-tlval">&#8377;4.82L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:100%"></div></div></div>
-                      <div><div class="mk-tlhead"><span class="mk-tlname">Tata Salt</span><span class="mk-tlval">&#8377;3.92L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:81%"></div></div></div>
-                      <div><div class="mk-tlhead"><span class="mk-tlname">Amul Gold Milk</span><span class="mk-tlval">&#8377;3.12L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:65%"></div></div></div>
-                      <div><div class="mk-tlhead"><span class="mk-tlname">Fortune Oil</span><span class="mk-tlval">&#8377;2.85L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:59%"></div></div></div>
-                      <div><div class="mk-tlhead"><span class="mk-tlname">Maggi Noodles</span><span class="mk-tlval">&#8377;2.19L</span></div><div class="mk-tltrack"><div class="mk-tlfill" style="width:45%"></div></div></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#pricing">Start free trial</a></li>
+          <li><a href="mailto:ayanv3419@gmail.com">Contact</a></li>
+        </ul>
       </div>
-    </section>
-
-    <!-- ============================================================
-         FEATURE 2 — INGESTION (mockup left, text right) — REVERSED
-    ============================================================ -->
-    <section class="section" id="how-it-works">
-      <div class="container">
-        <div class="box feature-2">
-        <div class="feature feature--rev">
-          <div class="feature__text reveal">
-            <p class="kicker kicker--dot">Drop-in ingestion</p>
-            <h2 class="h2">From spreadsheet to schema in one drop.</h2>
-            <p class="feature__body">
-              Drop the CSV or Excel files you already keep — or sync them from Google Drive. MetricAi infers columns, types, and relationships on ingest, so your data is ready to query the moment it lands.
-            </p>
-            <ul class="checklist">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>CSV and XLSX, no reformatting required</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Schema inferred automatically on upload</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>An isolated Postgres schema per account</span></li>
-            </ul>
-          </div>
-          <div class="feature__media reveal">
-            <div class="mk-win" aria-label="Data sources panel showing uploaded files, Google Drive sync, and inferred columns">
-              <div class="mk-bar">
-                <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
-                <div class="mk-url" aria-hidden="true">app.metricai.in</div>
-              </div>
-              <div class="mk-body">
-                <div class="mk-src">
-                  <div class="mk-srow">
-                    <div class="mk-sicon xls" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2zM8 11l3 5m0 -5l-3 5"/></svg></span></div>
-                    <div class="mk-sinfo">
-                      <div class="mk-sname">sales_2026.xlsx <span class="mk-srows">· 12,408 rows</span></div>
-                      <div class="mk-smeta"><span class="mk-sdot ok" aria-hidden="true"></span>Last sync 2 min ago · 6 sheets</div>
-                    </div>
-                    <div class="mk-status ok"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></span>Synced</div>
-                  </div>
-                  <div class="mk-srow">
-                    <div class="mk-sicon csv" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2zM9 9h1M9 13h6M9 17h6"/></svg></span></div>
-                    <div class="mk-sinfo">
-                      <div class="mk-sname">purchases_q2.csv <span class="mk-srows">· 8,112 rows</span></div>
-                      <div class="mk-smeta"><span class="mk-sdot ok" aria-hidden="true"></span>Last sync 11 min ago · 1 sheet</div>
-                    </div>
-                    <div class="mk-status ok"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></span>Synced</div>
-                  </div>
-                  <div class="mk-srow">
-                    <div class="mk-sicon drv" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10l-6 10l-3 -5l6 -10zm-6 10h12l3 -5h-12zm9 -15h-6l6 10h6z"/></svg></span></div>
-                    <div class="mk-sinfo">
-                      <div class="mk-sname">Google Drive · /Finance/Daily <span class="mk-srows">· 3 files</span></div>
-                      <div class="mk-smeta"><span class="mk-sdot ok" aria-hidden="true"></span>Last sync just now · 3 files</div>
-                    </div>
-                    <div class="mk-status ok"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></span>Synced</div>
-                  </div>
-                </div>
-                <div class="mk-schema">
-                  <div class="mk-schtop"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6h-16zm0 6v10m0 -5h10m6 -5v4m-3 -2h6"/></svg></span><span>Inferred columns</span></div>
-                  <div class="mk-tags">
-                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2zm12 -4v4M8 3v4M4 11h16"/></svg></span>order_date</span>
-                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9zM12 12l8 -4.5M12 12v9M12 12l-8 -4.5"/></svg></span>product</span>
-                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14M5 15h14M11 4l-2 16M15 4l-2 16"/></svg></span>qty</span>
-                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5h-11h3a4 4 0 0 1 0 8h-3l6 6m-6 -10h11"/></svg></span>unit_price</span>
-                    <span class="mk-tag"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.7 16.7l-4.3 4.3a2 2 0 0 1 -2.8 0l-4.3 -4.3a8 8 0 1 1 11.4 0z"/></svg></span>region</span>
-                  </div>
-                  <div class="mk-schfoot"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21l15 -15l-3 -3l-15 15zM15 6l3 3M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/></svg></span><span>Schema inferred automatically — <b>showing 5 of 14 columns</b>, types detected on ingest</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul class="contact">
+          <li><i class="fas fa-envelope"></i><span>ayanv3419@gmail.com</span></li>
+          <li><i class="fas fa-phone"></i><span>+91 90235 05664</span></li>
+          <li><i class="fas fa-bolt"></i><span>Reach the developer directly — not a ticket queue.</span></li>
+        </ul>
       </div>
-    </section>
-
-    <!-- ============================================================
-         FEATURE 3 — CONVERSATIONAL ANALYTICS (text left, mockup right)
-    ============================================================ -->
-    <section class="section">
-      <div class="container">
-        <div class="box feature-3">
-        <div class="feature">
-          <div class="feature__text reveal">
-            <p class="kicker kicker--dot">Ask in plain English</p>
-            <h2 class="h2">A clear answer in seconds — not a query you have to write.</h2>
-            <p class="feature__body">
-              Ask the question the way you'd ask an analyst. An agent picks the right tools per turn, writes the SQL, validates it, and streams back a real number, a short narrative, and the right chart.
-            </p>
-            <ul class="checklist">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Plain-English questions, no query language</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Every answer cites real rows in your data</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5l-7 7L3 8"/></svg><span>Responses stream live as the agent works</span></li>
-            </ul>
-          </div>
-          <div class="feature__media reveal">
-            <div class="mk-win" aria-label="Chat exchange showing a plain-English question and a grounded answer">
-              <div class="mk-bar">
-                <div class="mk-dots" aria-hidden="true"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span></div>
-                <div class="mk-url" aria-hidden="true">app.metricai.in</div>
-              </div>
-              <div class="mk-body">
-                <div class="mk-chat">
-                  <div class="mk-urow">
-                    <div class="mk-ubub">Which region grew fastest in Q2, and by how much?</div>
-                  </div>
-                  <div class="mk-arow">
-                    <div class="mk-av" aria-hidden="true"><span class="ti"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2 2 2 0 0 1 2 -2 2 2 0 0 1 -2 -2 2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6 6 6 0 0 1 -6 -6 6 6 0 0 1 -6 6 6 6 0 0 1 6 6z"/></svg></span></div>
-                    <div class="mk-abody">
-                      <div class="mk-intro">North zone led Q2 growth at <strong>+18.4%</strong> over Q1, driven by staples. Here's the regional breakdown.</div>
-                      <div class="mk-card">
-                        <table class="mk-tbl">
-                          <thead>
-                            <tr><th>Region</th><th class="mk-r">Q2 Revenue</th><th class="mk-r">Growth</th></tr>
-                          </thead>
-                          <tbody>
-                            <tr><td class="mk-pn">North</td><td class="mk-r mk-rev">&#8377;14,28,000</td><td class="mk-r mk-pos">+18.4%</td></tr>
-                            <tr><td class="mk-pn">West</td><td class="mk-r mk-rev">&#8377;11,06,500</td><td class="mk-r mk-pos">+9.2%</td></tr>
-                            <tr><td class="mk-pn">South</td><td class="mk-r mk-rev">&#8377;9,84,200</td><td class="mk-r mk-pos">+4.7%</td></tr>
-                            <tr><td class="mk-pn">East</td><td class="mk-r mk-rev">&#8377;6,71,900</td><td class="mk-r mk-neg">&#8722;2.3%</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="mk-insight"><span class="ti" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h1m8 -9v1m8 8h1M5.6 5.6l.7 .7m12.1 -.7l-.7 .7M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3M9.7 17h4.6"/></svg></span><span>East dipped 2.3% — the only region down this quarter. Grounded on 4,512 order rows in your data.</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         SECURITY / 3-UP GRID
-    ============================================================ -->
-    <section class="section" id="security">
-      <div class="container">
-        <div class="box security">
-        <div class="section-head reveal">
-          <p class="kicker kicker--dot">Built on guardrails</p>
-          <h2 class="h2">Three things we don't compromise on.</h2>
-          <p class="lede">A grounded answer is only as trustworthy as the system that produced it. These guarantees hold before any query reaches your data.</p>
-        </div>
-        <div class="grid3 reveal">
-          <div class="cell cell--emerald">
-            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5a8 8 0 0 1 -8 8a8 8 0 0 1 -8 -8v-5z"/><path d="M9 12l2 2l4 -4"/></svg></span>
-            <div class="cell__index">01</div>
-            <h4>Tenant isolation</h4>
-            <p>Each account lives in its own Postgres schema, scoped per request through <code style="font-family:ui-monospace,monospace;font-size:13px;color:var(--text-primary);background:var(--bg-inset);padding:1px 4px;border-radius:3px;border:1px solid var(--border)">search_path</code>. Your tables are never shared with another tenant.</p>
-          </div>
-          <div class="cell cell--indigo">
-            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5a8 8 0 0 1 -8 8a8 8 0 0 1 -8 -8v-5z"/><path d="M9 12l2 2l4 -4"/></svg></span>
-            <div class="cell__index">02</div>
-            <h4>Validated execution</h4>
-            <p>Every SQL statement the agent writes goes through an EXPLAIN-based dry-run before it touches the database. Anything that writes, mutates, or steps outside your schema is blocked.</p>
-          </div>
-          <div class="cell cell--amber">
-            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg></span>
-            <div class="cell__index">03</div>
-            <h4>Grounded answers</h4>
-            <p>Every number on screen traces back to a row in the file you uploaded. No invented KPIs, no fabricated trends — the narrative is built from what the SQL actually returned.</p>
-          </div>
-        </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         CONTACT / SUPPORT
-    ============================================================ -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="box contact">
-        <div class="section-head reveal">
-          <p class="kicker kicker--dot">Support &amp; contact</p>
-          <h2 class="h2">Talk to a real person.</h2>
-          <p class="lede">Questions, feedback, or help getting your data in — you reach the developer directly, not a ticket queue. Every message gets a personal reply.</p>
-        </div>
-        <div class="grid2 reveal">
-          <a class="cell cell--emerald" href="mailto:ayanv3419@gmail.com">
-            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6l9 -6"/></svg></span>
-            <div class="cell__index">Email</div>
-            <h4>ayanv3419@gmail.com</h4>
-            <p>Best for support questions, feedback, and onboarding help. Attach a screenshot or your spreadsheet and it gets sorted faster.</p>
-          </a>
-          <a class="cell cell--indigo" href="tel:+919023505664">
-            <span class="cell__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"/></svg></span>
-            <div class="cell__index">Phone</div>
-            <h4>+91 90235 05664</h4>
-            <p>For quick questions, or to book a live walkthrough of MetricAi with your own data.</p>
-          </a>
-        </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         FINAL CTA BAND
-    ============================================================ -->
-    <section class="section">
-      <div class="container">
-        <div class="box cta reveal">
-          <p class="kicker kicker--dot" style="justify-content:center">Get started</p>
-          <h2>Start asking better questions of your data.</h2>
-          <p class="lede">Upload a spreadsheet, ask a question, and get a grounded answer in seconds.</p>
-          <div class="cta__actions">
-            <a class="btn btn--primary" href="https://agentic-ai-livid-eta.vercel.app">Get started — it's free <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
-            <a class="btn btn--secondary" href="#demo">See it in action <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ============================================================
-       FOOTER
-  ============================================================ -->
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__row">
-        <div class="footer__brand">
-          <span class="sigma" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M37 10H13l12 14-12 14h24"/>
-            </svg>
-          </span>
-          <span class="footer__name">MetricAi</span>
-          <span class="footer__tag">Plain-English analytics for your business data.</span>
-        </div>
-        <nav class="footer__links" aria-label="Footer">
-          <a href="#product">Product</a>
-          <a href="#security">Security</a>
-          <a href="#contact">Contact</a>
-          <a href="https://agentic-ai-livid-eta.vercel.app">Sign in</a>
-        </nav>
-      </div>
-      <div class="footer__bottom">
-        <p class="footer__copy">&copy; 2026 MetricAi. All rights reserved.</p>
-        <p class="footer__contact">
-          <a href="mailto:ayanv3419@gmail.com">ayanv3419@gmail.com</a>
-          <span aria-hidden="true">&middot;</span>
-          <a href="tel:+919023505664">+91 90235 05664</a>
-        </p>
+    </div>
+    <div class="cin-foot-bottom">
+      <div class="cin-container">
+        <span>&copy; 2026 MetricAi. All rights reserved.</span>
+        <span>Grounded in your data.</span>
       </div>
     </div>
   </footer>
 
-  <!-- ============================================================
-       SCRIPT — subtle fade-up reveals + smooth-scroll
-  ============================================================ -->
-  <script>
-    (function () {
-      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var els = document.querySelectorAll('.reveal');
-
-      if (reduce || !('IntersectionObserver' in window)) {
-        els.forEach(function (el) { el.classList.add('is-visible'); });
-      } else {
-        var obs = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-visible');
-              obs.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        els.forEach(function (el) { obs.observe(el); });
-      }
-
-      // Smooth-scroll for same-page anchors (honors reduced-motion)
-      document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-        link.addEventListener('click', function (ev) {
-          var id = link.getAttribute('href');
-          if (id.length < 2) return;
-          var target = document.querySelector(id);
-          if (!target) return;
-          ev.preventDefault();
-          target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-        });
-      });
-    })();
-
-  </script>
-
+  <script src="js/cinematic.js"></script>
 </body>
 </html>
